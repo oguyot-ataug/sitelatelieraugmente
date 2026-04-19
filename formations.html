@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formations — L'Atelier Augmenté</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* ── Onglets ── */
+    .tabs-wrap { max-width: 1160px; margin: 0 auto; padding: 4rem 2.5rem 0; }
+    .tab-nav {
+      display: flex; gap: 0; border-bottom: 2px solid var(--border);
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Geist', system-ui, sans-serif;
+      font-size: 0.85rem; font-weight: 500; color: var(--ink-mid);
+      padding: 0.85rem 1.25rem; white-space: nowrap;
+      position: relative; transition: color 0.2s;
+      border-bottom: 2px solid transparent; margin-bottom: -2px; flex-shrink: 0;
+    }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+
+    .tab-panels { max-width: 1160px; margin: 0 auto; padding: 3rem 2.5rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Carte intro formation ── */
+    .fhc {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem;
+      align-items: center; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 2.75rem; margin-bottom: 2rem;
+      box-shadow: var(--sh-md);
+      border-top: 3px solid var(--fhc-color, var(--blue));
+    }
+    .ptag {
+      display: inline-block; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.26rem 0.7rem; border-radius: 4px; margin-bottom: 0.9rem;
+      color: var(--ptag-c, var(--blue));
+      background: var(--ptag-bg, var(--blue-dim));
+      border: 1px solid var(--ptag-bd, rgba(34,81,204,0.18));
+      font-family: 'Geist', system-ui, sans-serif;
+    }
+    .fhc h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--ink); }
+    .fhc p { color: var(--ink-mid); font-weight: 300; line-height: 1.8; margin-bottom: 1.5rem; font-size: 0.93rem; }
+    .feat-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .feat-list li { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.875rem; color: var(--ink-mid); font-weight: 300; line-height: 1.5; }
+    .ck { flex-shrink: 0; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; font-weight: 700; margin-top: 2px; background: var(--blue-dim); color: var(--blue); }
+
+    /* ── Grilles modules / niveaux ── */
+    .mgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+    .mgrid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+    .mcrd {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.5rem; box-shadow: var(--sh-sm);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .mcrd:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+    .mcrd-num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; color: var(--blue); margin-bottom: 0.55rem; display: block; }
+    .mcrd h4 { font-size: 0.93rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--ink); }
+    .mcrd p { font-size: 0.82rem; color: var(--ink-mid); line-height: 1.65; font-weight: 300; }
+    .mcrd ul { list-style: none; margin-top: 0.6rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .mcrd ul li { font-size: 0.79rem; color: var(--ink-light); padding-left: 0.85rem; position: relative; }
+    .mcrd ul li::before { content: '–'; position: absolute; left: 0; color: var(--ink-light); }
+
+    /* ── Niveaux colorés (Sheets) ── */
+    .level-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
+    .lcrd {
+      border-radius: 10px; padding: 2rem;
+      border: 1px solid var(--border); box-shadow: var(--sh-sm);
+      position: relative; overflow: hidden;
+      transition: box-shadow 0.22s, transform 0.22s;
+    }
+    .lcrd:hover { box-shadow: var(--sh-md); transform: translateY(-4px); }
+    .lcrd.decouverte { background: linear-gradient(135deg, #f0f4ff 0%, #fff 60%); border-top: 3px solid #2251cc; }
+    .lcrd.remise    { background: linear-gradient(135deg, #f0fbf6 0%, #fff 60%); border-top: 3px solid #3d8c6e; }
+    .lcrd.perfec    { background: linear-gradient(135deg, #fff8f0 0%, #fff 60%); border-top: 3px solid #bf5a2b; }
+    .lcrd-badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      padding: 0.22rem 0.65rem; border-radius: 4px; margin-bottom: 1rem;
+      font-family: 'Geist', system-ui, sans-serif;
+    }
+    .decouverte .lcrd-badge { background: rgba(34,81,204,0.1); color: #2251cc; border: 1px solid rgba(34,81,204,0.18); }
+    .remise     .lcrd-badge { background: rgba(61,140,110,0.1); color: #3d8c6e; border: 1px solid rgba(61,140,110,0.18); }
+    .perfec     .lcrd-badge { background: rgba(191,90,43,0.1); color: #bf5a2b; border: 1px solid rgba(191,90,43,0.18); }
+    .lcrd-icon { font-size: 1.75rem; margin-bottom: 0.75rem; display: block; }
+    .lcrd h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--ink); }
+    .lcrd-sub { font-size: 0.8rem; color: var(--ink-mid); font-weight: 300; margin-bottom: 1rem; font-style: italic; }
+    .lcrd ul { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .lcrd ul li { font-size: 0.82rem; color: var(--ink-mid); font-weight: 300; padding-left: 1rem; position: relative; line-height: 1.5; }
+    .lcrd ul li::before { content: '✓'; position: absolute; left: 0; font-size: 0.65rem; font-weight: 700; }
+    .decouverte ul li::before { color: #2251cc; }
+    .remise ul li::before     { color: #3d8c6e; }
+    .perfec ul li::before     { color: #bf5a2b; }
+
+    /* ── Outils Workspace (grille icônes) ── */
+    .tools-intro { margin-bottom: 2rem; }
+    .tools-intro h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .tools-intro p { font-size: 0.9rem; color: var(--ink-mid); font-weight: 300; line-height: 1.75; }
+    .tools-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2rem; }
+    .tool-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.4rem 1rem; text-align: center;
+      box-shadow: var(--sh-sm); transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+    .tool-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); border-color: rgba(34,81,204,0.18); }
+    .tool-icon { font-size: 1.75rem; margin-bottom: 0.6rem; display: block; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+    .tool-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--ink); }
+    .tool-card p { font-size: 0.75rem; color: var(--ink-light); line-height: 1.5; font-weight: 300; }
+
+    /* ── Audience cards ── */
+    .agrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+    .acrd { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 2rem; box-shadow: var(--sh-sm); transition: box-shadow 0.2s, transform 0.2s; }
+    .acrd:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+    .acrd .ico { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .acrd h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.55rem; color: var(--ink); }
+    .acrd p { font-size: 0.875rem; color: var(--ink-mid); font-weight: 300; line-height: 1.75; }
+
+    /* ── Info note ── */
+    .infonote { margin-top: 2rem; background: var(--blue-dim); border: 1px solid rgba(34,81,204,0.14); border-radius: 8px; padding: 1.5rem 1.75rem; display: flex; gap: 1rem; align-items: flex-start; }
+    .infonote .ico { font-size: 1.5rem; flex-shrink: 0; }
+    .infonote h4 { font-weight: 700; font-size: 0.93rem; margin-bottom: 0.3rem; }
+    .infonote p { font-size: 0.86rem; color: var(--ink-mid); line-height: 1.75; font-weight: 300; }
+
+    /* ── Section séparateur ── */
+    .section-sep { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+    /* ── FAQ ── */
+    .faq { background: var(--bg-alt); padding: 5rem 2.5rem; }
+    .faq-inner { max-width: 860px; margin: 0 auto; }
+    .faq-inner h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 2rem; }
+    .aq { border-bottom: 1px solid var(--border); }
+    .aq-q { width: 100%; background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; font-family: 'Geist', system-ui, sans-serif; font-size: 0.93rem; font-weight: 500; color: var(--ink); text-align: left; gap: 1rem; }
+    .aq-ico { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border-md); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: var(--ink-mid); transition: transform 0.3s, border-color 0.3s, color 0.3s; }
+    .aq.open .aq-ico { transform: rotate(45deg); border-color: var(--blue); color: var(--blue); }
+    .aq-body { max-height: 0; overflow: hidden; transition: max-height 0.38s ease; }
+    .aq.open .aq-body { max-height: 300px; }
+    .aq-body p { padding: 0 0 1.25rem; font-size: 0.875rem; color: var(--ink-mid); line-height: 1.8; font-weight: 300; }
+
+    @media (max-width: 860px) {
+      .fhc { grid-template-columns: 1fr; gap: 2rem; }
+      .mgrid, .mgrid-4, .level-cards, .tools-grid { grid-template-columns: 1fr 1fr; }
+      .agrid { grid-template-columns: 1fr; }
+      .tabs-wrap, .tab-panels { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .faq { padding: 4rem 1.25rem; }
+    }
+    @media (max-width: 540px) {
+      .mgrid, .mgrid-4, .level-cards, .tools-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="page-hero">
+  <span class="page-tag reveal">Organisme certifié N° 44540498054</span>
+  <h1 class="reveal d1">Nos <span style="color:var(--blue)">Formations</span></h1>
+  <p class="lead reveal d2">Des formations concrètes, sur mesure et immédiatement applicables — pour les établissements scolaires comme pour les entreprises.</p>
+</section>
+
+<!-- ═══ ONGLETS ═══ -->
+<div class="tabs-wrap">
+  <div class="tab-nav" role="tablist">
+    <button class="tab-btn active" data-tab="sheets"    role="tab">📊 Google Sheets</button>
+    <button class="tab-btn"        data-tab="workspace" role="tab">🎓 Workspace Éducation</button>
+    <button class="tab-btn"        data-tab="outils"    role="tab">🛠️ Outils Google</button>
+    <button class="tab-btn"        data-tab="ia"        role="tab">🤖 IA Générative</button>
+    <button class="tab-btn"        data-tab="script"    role="tab">⚡ Apps Script</button>
+    <button class="tab-btn"        data-tab="entreprise" role="tab">🏢 Entreprises</button>
+  </div>
+</div>
+
+<div class="tab-panels">
+
+  <!-- ══════════════════════════════════════
+       ONGLET 1 — GOOGLE SHEETS
+  ══════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-sheets">
+
+    <div class="fhc reveal">
+      <div>
+        <span class="ptag">Éducation &amp; Entreprise</span>
+        <h2>Maîtrisez Google Sheets</h2>
+        <p>Du débutant complet à l'utilisateur expert : trois niveaux progressifs pour faire de Google Sheets un véritable outil de pilotage. Chaque formation est adaptée à votre contexte — scolaire, administratif ou entreprise.</p>
+        <a href="contact.html" class="btn btn-primary">Choisir mon niveau →</a>
+      </div>
+      <ul class="feat-list">
+        <li><span class="ck">✓</span> Parcours personnalisé selon votre niveau de départ</li>
+        <li><span class="ck">✓</span> Exercices sur vos propres données et cas réels</li>
+        <li><span class="ck">✓</span> Fiches récapitulatives et ressources incluses</li>
+        <li><span class="ck">✓</span> Formation en présentiel ou visioconférence</li>
+        <li><span class="ck">✓</span> Individuel, groupe ou inter-établissements</li>
+        <li><span class="ck">✓</span> Déplacements possibles dans toute la France (frais supplémentaires)</li>
+      </ul>
+    </div>
+
+    <!-- Trois niveaux -->
+    <div class="level-cards">
+
+      <div class="lcrd decouverte reveal">
+        <span class="lcrd-badge">Niveau 1</span>
+        <span class="lcrd-icon">🌱</span>
+        <h3>Découverte</h3>
+        <p class="lcrd-sub">Zéro prérequis — pour démarrer sereinement</p>
+        <ul>
+          <li>Créer, ouvrir et organiser un classeur</li>
+          <li>Saisir et mettre en forme des données</li>
+          <li>Formules essentielles : SOMME, MOYENNE, NB</li>
+          <li>Trier, filtrer et rechercher des données</li>
+          <li>Partage et collaboration en temps réel</li>
+          <li>Imprimer et exporter en PDF</li>
+        </ul>
+      </div>
+
+      <div class="lcrd remise reveal d1">
+        <span class="lcrd-badge">Niveau 2</span>
+        <span class="lcrd-icon">🔧</span>
+        <h3>Remise à niveau</h3>
+        <p class="lcrd-sub">Vous utilisez Sheets, mais avec des lacunes</p>
+        <ul>
+          <li>Formules conditionnelles : SI, SI.ENS, ET, OU</li>
+          <li>RECHERCHEV / RECHERCHEX : liaisons entre feuilles</li>
+          <li>FILTER : extraire et afficher des données sous conditions</li>
+          <li>Mise en forme conditionnelle avancée</li>
+          <li>Tableaux croisés dynamiques (TCD)</li>
+          <li>Graphiques pertinents et tableaux de bord</li>
+          <li>Validation des données et listes déroulantes</li>
+        </ul>
+      </div>
+
+      <div class="lcrd perfec reveal d2">
+        <span class="lcrd-badge">Niveau 3</span>
+        <span class="lcrd-icon">🚀</span>
+        <h3>Perfectionnement</h3>
+        <p class="lcrd-sub">Utilisateurs réguliers souhaitant aller plus loin</p>
+        <ul>
+          <li>Formules matricielles et LAMBDA</li>
+          <li>FILTER : extraire dynamiquement des données selon critères</li>
+          <li>QUERY : requêtes SQL dans vos feuilles</li>
+          <li>Automatisation avec macros enregistrées</li>
+          <li>Connexion à des données externes (API, Forms)</li>
+          <li>Introduction à Apps Script via Sheets</li>
+          <li>Tableaux de bord interactifs et dynamiques</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Modules complémentaires -->
+    <hr class="section-sep">
+    <div style="margin-bottom:1.5rem">
+      <span class="section-tag">Modules spécialisés</span>
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.4rem;">Pour aller encore plus loin</h3>
+      <p style="font-size:0.875rem;color:var(--ink-mid);font-weight:300;">Des ateliers ciblés sur des usages métier spécifiques, combinables avec n'importe quel niveau.</p>
+    </div>
+    <div class="mgrid-4">
+      <div class="mcrd reveal">
+        <span class="mcrd-num">ATELIER A</span>
+        <h4>Suivi de cohorte</h4>
+        <p>Tableau de bord de suivi des élèves ou étudiants : notes, progression, alertes automatiques.</p>
+      </div>
+      <div class="mcrd reveal d1">
+        <span class="mcrd-num">ATELIER B</span>
+        <h4>Budget & comptabilité</h4>
+        <p>Gestion budgétaire, suivi des dépenses, rapports financiers automatisés pour directions.</p>
+      </div>
+      <div class="mcrd reveal d2">
+        <span class="mcrd-num">ATELIER C</span>
+        <h4>Planning & emploi du temps</h4>
+        <p>Construction et gestion d'emplois du temps, plannings de permanences, calendriers partagés.</p>
+      </div>
+      <div class="mcrd reveal d3">
+        <span class="mcrd-num">ATELIER D</span>
+        <h4>Sheets × IA</h4>
+        <p>Exploiter Gemini dans Sheets, formules assistées par IA, génération de contenus tabulaires.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       ONGLET 2 — WORKSPACE ÉDUCATION
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-workspace">
+    <div class="fhc reveal">
+      <div>
+        <span class="ptag">Pour établissements scolaires</span>
+        <h2>Google Workspace Education</h2>
+        <p>Un accompagnement complet de A à Z pour déployer et maîtriser Google Workspace dans votre établissement. Méthode éprouvée issue de 18 ans de direction scolaire.</p>
+        <a href="contact.html" class="btn btn-primary">Demander un audit gratuit</a>
+      </div>
+      <ul class="feat-list">
+        <li><span class="ck">✓</span> Audit de l'environnement numérique existant</li>
+        <li><span class="ck">✓</span> Configuration complète de la console d'administration</li>
+        <li><span class="ck">✓</span> Formation des équipes pédagogiques et administratives</li>
+        <li><span class="ck">✓</span> Déploiement Classroom, Drive, Meet, Forms, Sheets…</li>
+        <li><span class="ck">✓</span> Création de workflows adaptés à votre établissement</li>
+        <li><span class="ck">✓</span> Déplacements dans toute la France (frais supplémentaires)</li>
+        <li><span class="ck">✓</span> Support post-formation inclus</li>
+      </ul>
+    </div>
+    <div class="mgrid">
+      <div class="mcrd reveal">
+        <span class="mcrd-num">MODULE 01</span>
+        <h4>Administration Workspace</h4>
+        <p>Console d'admin, gestion des utilisateurs, politiques de sécurité, groupes et unités organisationnelles.</p>
+      </div>
+      <div class="mcrd reveal d1">
+        <span class="mcrd-num">MODULE 02</span>
+        <h4>Google Classroom</h4>
+        <p>Création de cours, devoirs différenciés, suivi des élèves, communication avec les familles.</p>
+      </div>
+      <div class="mcrd reveal d2">
+        <span class="mcrd-num">MODULE 03</span>
+        <h4>Collaboration & Drive</h4>
+        <p>Drive partagé, droits d'accès, co-édition Docs/Sheets/Slides, gestion documentaire scolaire.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       ONGLET 3 — OUTILS GOOGLE
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-outils">
+    <div class="fhc reveal">
+      <div>
+        <span class="ptag">Éducation &amp; Entreprise</span>
+        <h2>Tous les outils Google Workspace</h2>
+        <p>Au-delà de Sheets, la suite Google Workspace regorge d'outils puissants souvent sous-exploités. Chaque formation est ciblée sur un outil et immédiatement applicable dans votre quotidien.</p>
+        <a href="contact.html" class="btn btn-primary">Composer mon programme →</a>
+      </div>
+      <ul class="feat-list">
+        <li><span class="ck">✓</span> Formation sur un ou plusieurs outils au choix</li>
+        <li><span class="ck">✓</span> Adaptée au secteur : éducation ou entreprise</li>
+        <li><span class="ck">✓</span> Exercices pratiques sur vos cas d'usage réels</li>
+        <li><span class="ck">✓</span> Niveau débutant à avancé selon votre profil</li>
+        <li><span class="ck">✓</span> Sessions de 3h, demi-journée ou journée complète</li>
+        <li><span class="ck">✓</span> Présentiel Nancy, déplacements France entière (frais sup.), visio</li>
+      </ul>
+    </div>
+
+    <div class="tools-intro reveal">
+      <span class="section-tag">Éducation</span>
+      <h3>Outils pour établissements scolaires</h3>
+      <p>Maîtrisez les outils conçus pour transformer l'enseignement et simplifier la gestion d'établissement.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card reveal">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/classroom/favicon.png" alt="Classroom" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Classroom</h4>
+        <p>Cours, devoirs, corrections, feedback élèves — l'espace de classe numérique complet.</p>
+      </div>
+      <div class="tool-card reveal d1">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/docs/spreadsheets/favicon3.ico" alt="Sheets" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Sheets</h4>
+        <p>Suivi de cohortes, notes, budgets, plannings — la puissance d'Excel dans le cloud.</p>
+      </div>
+      <div class="tool-card reveal d2">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/docs/spreadsheets/forms/favicon_qp2.png" alt="Forms" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Forms</h4>
+        <p>Évaluations, sondages, inscriptions — collecte de données automatisée et analysée.</p>
+      </div>
+      <div class="tool-card reveal d3">
+        <span class="tool-icon"><img src="https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v6/web-32dp/logo_meet_2020q4_color_1x_web_32dp.png" alt="Meet" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Meet</h4>
+        <p>Visioconférence pédagogique, classes hybrides, réunions d'équipe et parents-profs.</p>
+      </div>
+      <div class="tool-card reveal">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Drive" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Drive</h4>
+        <p>Organisation documentaire, partage sécurisé, droits d'accès et travail collaboratif.</p>
+      </div>
+      <div class="tool-card reveal d1">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" alt="Docs" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Docs</h4>
+        <p>Rédaction collaborative, commentaires, historique — documents vivants et partagés.</p>
+      </div>
+      <div class="tool-card reveal d2">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" alt="Slides" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Slides</h4>
+        <p>Présentations collaboratives, supports de cours visuels, modèles réutilisables.</p>
+      </div>
+      <div class="tool-card reveal d3">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_31_2x.png" alt="Agenda" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Agenda</h4>
+        <p>Emplois du temps, salles, ressources partagées — organisation collective simplifiée.</p>
+      </div>
+    </div>
+
+    <hr class="section-sep">
+
+    <div class="tools-intro reveal">
+      <span class="section-tag">Entreprise</span>
+      <h3>Outils pour les équipes professionnelles</h3>
+      <p>Adoptez les meilleures pratiques collaboratives pour gagner en efficacité collective au quotidien.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card reveal">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/chat/favicon/favicon_96.png" alt="Chat" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Chat</h4>
+        <p>Messagerie d'équipe, espaces de travail thématiques, intégrations avec vos outils.</p>
+      </div>
+      <div class="tool-card reveal d1">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/docs/spreadsheets/favicon3.ico" alt="Sheets" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Sheets avancé</h4>
+        <p>Reporting, dashboards, formules complexes, automatisations pour les équipes métier.</p>
+      </div>
+      <div class="tool-card reveal d2">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/sites/p/6664a3/system/app/images/favicon.ico" alt="Sites" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Sites</h4>
+        <p>Intranet d'équipe, base de connaissances, portail projet — sans coder.</p>
+      </div>
+      <div class="tool-card reveal d3">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/docs/spreadsheets/forms/favicon_qp2.png" alt="Forms" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Forms pro</h4>
+        <p>Formulaires métier avancés : logique conditionnelle, intégrations Sheets, workflows.</p>
+      </div>
+      <div class="tool-card reveal">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/keep/favicon_2020q4v2.ico" alt="Keep" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Google Tasks &amp; Keep</h4>
+        <p>Organisation personnelle, notes partagées, gestion des tâches intégrée à Gmail.</p>
+      </div>
+      <div class="tool-card reveal d1">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Drive" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Drive partagé</h4>
+        <p>Organisation des dossiers d'équipe, gestion des droits, archivage et gouvernance documentaire.</p>
+      </div>
+      <div class="tool-card reveal d2">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" alt="Gmail" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Gmail pro</h4>
+        <p>Filtres, libellés, modèles, délégation — maîtriser Gmail pour une productivité maximale.</p>
+      </div>
+      <div class="tool-card reveal d3">
+        <span class="tool-icon"><img src="https://ssl.gstatic.com/images/branding/product/1x/admin_48dp.png" alt="Admin" style="width:40px;height:40px;object-fit:contain;"></span>
+        <h4>Admin &amp; Sécurité</h4>
+        <p>Console d'administration, politiques de sécurité, gestion des accès et conformité RGPD.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       ONGLET 4 — IA GÉNÉRATIVE
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-ia">
+
+    <!-- Carte intro -->
+    <div class="fhc reveal" style="--fhc-color:var(--terra)">
+      <div>
+        <span class="ptag" style="--ptag-c:var(--terra);--ptag-bg:var(--terra-dim);--ptag-bd:rgba(191,90,43,0.18)">Éducation · Entreprise · Indépendants</span>
+        <h2>Maîtrise de l'IA Générative</h2>
+        <p>L'IA transforme tous les métiers. Que vous soyez enseignant, chef d'établissement, dirigeant d'entreprise ou micro-entrepreneur, cette formation vous donne les clés pour exploiter l'IA au quotidien — concrètement, éthiquement, efficacement.</p>
+        <a href="contact.html" class="btn btn-accent">Demander un programme sur mesure</a>
+      </div>
+      <ul class="feat-list">
+        <li><span class="ck" style="background:var(--terra-dim);color:var(--terra)">✓</span> Panorama des outils IA (ChatGPT, Gemini, Claude…)</li>
+        <li><span class="ck" style="background:var(--terra-dim);color:var(--terra)">✓</span> Prompt engineering : formuler des requêtes précises et reproductibles</li>
+        <li><span class="ck" style="background:var(--terra-dim);color:var(--terra)">✓</span> Automatiser les tâches répétitives pour gagner du temps</li>
+        <li><span class="ck" style="background:var(--terra-dim);color:var(--terra)">✓</span> Créer des contenus professionnels (textes, visuels, présentations)</li>
+        <li><span class="ck" style="background:var(--terra-dim);color:var(--terra)">✓</span> Intégrer l'IA dans Google Workspace (Gemini)</li>
+        <li><span class="ck" style="background:var(--terra-dim);color:var(--terra)">✓</span> Enjeux éthiques, droits, confidentialité des données</li>
+      </ul>
+    </div>
+
+    <!-- 4 profils -->
+    <div style="margin-bottom:1.5rem">
+      <span class="section-tag">Pour qui ?</span>
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.4rem">Une formation adaptée à votre réalité</h3>
+      <p style="font-size:0.875rem;color:var(--ink-mid);font-weight:300">Chaque session est construite autour de vos vrais cas d'usage — pas de scénarios fictifs.</p>
+    </div>
+    <div class="mgrid-4" style="margin-bottom:2.5rem">
+      <div class="mcrd reveal">
+        <span class="mcrd-num" style="color:var(--terra)">👩‍🏫 ENSEIGNANTS</span>
+        <h4>Éducation</h4>
+        <p>Préparer des cours, différencier, créer des évaluations, rédiger des appréciations. Divisez par 3 le temps passé sur les tâches répétitives.</p>
+      </div>
+      <div class="mcrd reveal d1">
+        <span class="mcrd-num" style="color:var(--terra)">🏫 DIRECTIONS</span>
+        <h4>Établissements scolaires</h4>
+        <p>Rédiger des communications, structurer des projets, analyser des données, automatiser les rapports — avec l'IA comme assistant de direction.</p>
+      </div>
+      <div class="mcrd reveal d2">
+        <span class="mcrd-num" style="color:var(--terra)">🏢 ENTREPRISES</span>
+        <h4>Équipes &amp; managers</h4>
+        <p>Accélérer la rédaction, analyser des données, automatiser les reportings, optimiser la relation client — l'IA au service de la productivité collective.</p>
+      </div>
+      <div class="mcrd reveal d3">
+        <span class="mcrd-num" style="color:var(--terra)">🧑‍💻 INDÉPENDANTS</span>
+        <h4>Micro-entrepreneurs</h4>
+        <p>Créer du contenu, rédiger des devis et emails, gérer votre communication, prospecter — faites-en plus, seul, grâce à l'IA comme second bras.</p>
+      </div>
+    </div>
+
+    <!-- Modules communs -->
+    <hr class="section-sep">
+    <div style="margin-bottom:1.5rem">
+      <span class="section-tag">Programme</span>
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.4rem">Les 3 modules de la formation</h3>
+      <p style="font-size:0.875rem;color:var(--ink-mid);font-weight:300">Un socle commun, puis des ateliers ciblés sur votre contexte métier.</p>
+    </div>
+    <div class="mgrid">
+      <div class="mcrd reveal">
+        <span class="mcrd-num" style="color:var(--terra)">MODULE 01</span>
+        <h4>Comprendre l'IA</h4>
+        <p>Fonctionnement, limites, enjeux éthiques, droits d'auteur, confidentialité des données — poser les bons fondements avant d'agir.</p>
+        <ul>
+          <li>Comment fonctionnent les LLMs</li>
+          <li>Ce que l'IA peut et ne peut pas faire</li>
+          <li>Données personnelles et RGPD</li>
+        </ul>
+      </div>
+      <div class="mcrd reveal d1">
+        <span class="mcrd-num" style="color:var(--terra)">MODULE 02</span>
+        <h4>Prompt engineering</h4>
+        <p>Apprendre à formuler des requêtes précises, à itérer, à construire des systèmes de prompts réutilisables pour vos usages récurrents.</p>
+        <ul>
+          <li>Structure d'un bon prompt</li>
+          <li>Rôles, contexte, format, exemples</li>
+          <li>Bibliothèque de prompts personnelle</li>
+        </ul>
+      </div>
+      <div class="mcrd reveal d2">
+        <span class="mcrd-num" style="color:var(--terra)">MODULE 03</span>
+        <h4>Ateliers pratiques</h4>
+        <p>Travail sur vos cas d'usage réels selon votre profil : rédaction, analyse, création de contenus, automatisation, communication…</p>
+        <ul>
+          <li>Cas d'usage métier concrets</li>
+          <li>Intégration à votre flux de travail</li>
+          <li>IA + Google Workspace (Gemini)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       ONGLET 5 — APPS SCRIPT
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-script">
+    <div class="fhc reveal" style="--fhc-color:var(--sage)">
+      <div>
+        <span class="ptag" style="--ptag-c:var(--sage);--ptag-bg:var(--sage-dim);--ptag-bd:rgba(61,140,110,0.18)">Automatisation</span>
+        <h2>Google Apps Script Academy</h2>
+        <p>Optimisez le quotidien de vos équipes administratives. Publipostage, flux de documents, outils sur mesure — sans abonnement, vos outils vous appartiennent à vie.</p>
+        <a href="contact.html" class="btn btn-outline" style="border-color:var(--sage);color:var(--sage)">Démarrer</a>
+      </div>
+      <ul class="feat-list">
+        <li><span class="ck" style="background:var(--sage-dim);color:var(--sage)">✓</span> Bases de JavaScript appliqué à Google Workspace</li>
+        <li><span class="ck" style="background:var(--sage-dim);color:var(--sage)">✓</span> Triggers, menus et interfaces personnalisées</li>
+        <li><span class="ck" style="background:var(--sage-dim);color:var(--sage)">✓</span> Système de publipostage Sheets → Gmail</li>
+        <li><span class="ck" style="background:var(--sage-dim);color:var(--sage)">✓</span> Génération automatique de documents Docs / PDF</li>
+        <li><span class="ck" style="background:var(--sage-dim);color:var(--sage)">✓</span> Gestion de flux et notifications automatiques</li>
+        <li><span class="ck" style="background:var(--sage-dim);color:var(--sage)">✓</span> Outils livrés clé en main avec code source complet</li>
+      </ul>
+    </div>
+    <div class="mgrid">
+      <div class="mcrd reveal">
+        <span class="mcrd-num" style="color:var(--sage)">NIVEAU 1</span>
+        <h4>Initiation</h4>
+        <p>Premiers scripts, automatisation simple, compréhension de la structure Apps Script.</p>
+        <ul>
+          <li>Variables, fonctions, boucles</li>
+          <li>Lire/écrire dans Sheets</li>
+          <li>Envoyer un email automatique</li>
+        </ul>
+      </div>
+      <div class="mcrd reveal d1">
+        <span class="mcrd-num" style="color:var(--sage)">NIVEAU 2</span>
+        <h4>Intermédiaire</h4>
+        <p>Manipuler Sheets, Docs et Gmail programmatiquement. Créer des menus et formulaires.</p>
+        <ul>
+          <li>Publipostage complet</li>
+          <li>Génération de PDF</li>
+          <li>Triggers temporels et événements</li>
+        </ul>
+      </div>
+      <div class="mcrd reveal d2">
+        <span class="mcrd-num" style="color:var(--sage)">NIVEAU 3</span>
+        <h4>Avancé</h4>
+        <p>Systèmes complets, APIs externes, applications web embarquées dans Workspace.</p>
+        <ul>
+          <li>Apps Web (HTML/CSS/JS)</li>
+          <li>Connexion à des APIs externes</li>
+          <li>Systèmes multi-feuilles complexes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       ONGLET 6 — ENTREPRISES
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-entreprise">
+    <div class="fhc reveal">
+      <div>
+        <span class="ptag">Entreprises</span>
+        <h2>Interventions Professionnelles</h2>
+        <p>Nous formons vos collaborateurs pour automatiser les tâches répétitives et exploiter le potentiel de l'IA dans votre contexte métier. Audit personnalisé systématiquement inclus.</p>
+        <a href="contact.html" class="btn btn-primary">Parlons de vos besoins</a>
+      </div>
+      <ul class="feat-list">
+        <li><span class="ck">✓</span> Audit de productivité et identification des leviers</li>
+        <li><span class="ck">✓</span> Formation IA adaptée à votre secteur d'activité</li>
+        <li><span class="ck">✓</span> Maîtrise complète de Google Workspace collaboratif</li>
+        <li><span class="ck">✓</span> Automatisation des processus métier (Apps Script)</li>
+        <li><span class="ck">✓</span> Formation en présentiel, distanciel ou déplacement France entière</li>
+        
+      </ul>
+    </div>
+    <div class="agrid">
+      <div class="acrd reveal">
+        <span class="ico">📈</span>
+        <h3>PME &amp; TPE</h3>
+        <p>Adoptez Google Workspace pour remplacer vos outils disparates : emails, agendas, documents, stockage — tout centralisé et collaboratif.</p>
+      </div>
+      <div class="acrd reveal d1">
+        <span class="ico">🏛️</span>
+        <h3>Administrations &amp; collectivités</h3>
+        <p>Modernisez vos pratiques documentaires, automatisez les circuits de validation et formez vos agents aux outils collaboratifs.</p>
+      </div>
+    </div>
+    <div class="infonote reveal">
+      <span class="ico">💡</span>
+      <div>
+        <h4>Financement des formations</h4>
+        <p>En tant qu'organisme de formation déclaré (N° 44540498054), nos formations peuvent ouvrir droit à certains dispositifs de financement. Contactez-nous pour étudier ensemble les options adaptées à votre situation.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-panels -->
+
+<!-- ══ FAQ ══ -->
+<div class="faq">
+  <div class="faq-inner">
+    <h2 class="reveal">Questions fréquentes</h2>
+    <div class="aq"><button class="aq-q">Comment se déroule une formation Google Sheets ?<span class="aq-ico">+</span></button><div class="aq-body"><p>La formation commence par un bref diagnostic de votre niveau et de vos usages. Nous travaillons ensuite sur vos propres fichiers et cas concrets — pas de jeux de données fictifs. Chaque participant repart avec des fiches récapitulatives et des ressources pratiques immédiatement réutilisables.</p></div></div>
+    <div class="aq"><button class="aq-q">Peut-on mixer plusieurs outils dans une même formation ?<span class="aq-ico">+</span></button><div class="aq-body"><p>Absolument. Nous construisons souvent des programmes sur mesure qui combinent plusieurs outils — par exemple Sheets + Forms + Apps Script pour automatiser un processus complet. Contactez-nous pour composer votre programme.</p></div></div>
+    <div class="aq"><button class="aq-q">Les formations se déroulent-elles en présentiel ou à distance ?<span class="aq-ico">+</span></button><div class="aq-body"><p>Les deux formules sont disponibles. Les interventions en présentiel sont proposées principalement en région Grand Est (Nancy et environs). Les formations à distance sont disponibles partout en France via Google Meet.</p></div></div>
+    <div class="aq"><button class="aq-q">Combien de participants par session ?<span class="aq-ico">+</span></button><div class="aq-body"><p>Les sessions individuelles et les petits groupes (2 à 6 personnes) donnent les meilleurs résultats. Pour des formations d'équipe plus larges, nous adaptons le format et pouvons intervenir en intra-établissement ou intra-entreprise.</p></div></div>
+    <div class="aq"><button class="aq-q">Existe-t-il des dispositifs de financement pour ces formations ?<span class="aq-ico">+</span></button><div class="aq-body"><p>En tant qu'organisme de formation déclaré (N° 44540498054), certaines de nos formations peuvent ouvrir droit à des dispositifs de financement. Prenez contact avec nous pour étudier ensemble les possibilités selon votre structure et votre situation.</p></div></div>
+    <div class="aq"><button class="aq-q">Les outils créés (scripts, automatisations) nous appartiennent-ils ?<span class="aq-ico">+</span></button><div class="aq-body"><p>Oui, intégralement. Tout script ou outil développé dans le cadre de votre accompagnement vous est livré avec le code source complet. Vous êtes propriétaires à 100%, sans abonnement ni dépendance envers nous.</p></div></div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="shared.js"></script>
+<script>
+  // Onglets
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+    });
+  });
+  // Accordion FAQ
+  document.querySelectorAll('.aq-q').forEach(q => {
+    q.addEventListener('click', function() {
+      const item = this.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.aq').forEach(a => a.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Rendez-vous — L'Atelier Augmenté</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    /*
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  CONFIGURATION EMAILJS                                      ║
+    ║  1. Créez un compte sur https://www.emailjs.com (gratuit)   ║
+    ║  2. Ajoutez un Email Service (Gmail)                        ║
+    ║  3. Créez un Email Template avec les variables :            ║
+    ║     {{from_name}}  {{from_email}}  {{structure}}            ║
+    ║     {{sujet}}      {{message}}                              ║
+    ║  4. Remplacez les 3 valeurs ci-dessous                      ║
+    ╚══════════════════════════════════════════════════════════════╝
+    */
+    const EJS_KEY      = 'rmZbrfZQtLxBnn8pO';    // Account > API Keys
+    const EJS_SERVICE  = 'service_mae4fln';    // Email Services
+    const EJS_TEMPLATE = 'VOTRE_TEMPLATE_ID';   // Email Templates
+    emailjs.init({ publicKey: EJS_KEY });
+  </script>
+
+  <style>
+    /* ── Onglets ── */
+    .page-tabs { display: flex; justify-content: center; gap: 0.5rem; padding: 2rem 2.5rem 0; }
+    .ptab { padding: 0.65rem 1.6rem; border-radius: 6px; border: 1.5px solid var(--border-md); background: var(--bg-card); color: var(--ink-mid); font-family: 'Geist', system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .ptab:hover { border-color: var(--blue); color: var(--blue); }
+    .ptab.active { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 600; }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* ── Contact ── */
+    .contact-wrap { max-width: 1160px; margin: 0 auto; padding: 3rem 2.5rem 6rem; display: grid; grid-template-columns: 1fr 1.5fr; gap: 5rem; align-items: start; }
+    .cinfo { position: sticky; top: 100px; }
+    .cinfo h2 { font-size: 1.7rem; font-weight: 700; margin-bottom: 0.85rem; letter-spacing: -0.025em; }
+    .cinfo > p { color: var(--ink-mid); font-weight: 300; line-height: 1.8; margin-bottom: 2rem; }
+    .cmethods { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.75rem; }
+    .cmethod { display: flex; align-items: center; gap: 0.9rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.1rem 1.35rem; text-decoration: none; color: var(--ink); box-shadow: var(--sh-sm); transition: all 0.2s; }
+    a.cmethod:hover { border-color: rgba(34,81,204,0.25); box-shadow: var(--sh-md); transform: translateX(3px); }
+    .cmethod-ico { width: 36px; height: 36px; border-radius: 7px; background: var(--blue-dim); border: 1px solid rgba(34,81,204,0.12); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .cmethod h4 { font-size: 0.86rem; font-weight: 600; margin-bottom: 0.15rem; }
+    .cmethod p { font-size: 0.78rem; color: var(--ink-mid); margin: 0; }
+    .cpills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .cpill { font-size: 0.72rem; color: var(--ink-mid); border: 1px solid var(--border); border-radius: 4px; padding: 0.25rem 0.65rem; background: var(--bg-card); }
+
+    /* Form */
+    .cform-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 2.5rem; box-shadow: var(--sh-lg); }
+    .cform-hd { margin-bottom: 1.75rem; }
+    .cform-hd h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .cform-hd p { font-size: 0.86rem; color: var(--ink-mid); font-weight: 300; }
+    .fgrp { margin-bottom: 1.1rem; }
+    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { display: block; font-size: 0.76rem; font-weight: 600; color: var(--ink-mid); margin-bottom: 0.4rem; letter-spacing: 0.02em; }
+    input, textarea { width: 100%; background: var(--bg); border: 1px solid var(--border-md); border-radius: 6px; padding: 0.72rem 0.9rem; font-family: 'Geist', system-ui, sans-serif; font-size: 0.875rem; color: var(--ink); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    input::placeholder, textarea::placeholder { color: var(--ink-light); }
+    input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-dim); }
+    textarea { resize: vertical; min-height: 110px; }
+    .schips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .schip { padding: 0.4rem 0.85rem; border-radius: 4px; border: 1px solid var(--border-md); background: var(--bg); color: var(--ink-mid); font-size: 0.78rem; cursor: pointer; font-family: 'Geist', system-ui, sans-serif; transition: all 0.18s; }
+    .schip:hover { border-color: var(--blue); color: var(--blue); }
+    .schip.sel { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); font-weight: 600; }
+    .fsubmit { width: 100%; padding: 0.9rem; background: var(--blue); color: #fff; border: none; border-radius: 6px; font-family: 'Geist', system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .fsubmit:hover:not(:disabled) { background: var(--blue-dark); box-shadow: var(--sh-blue); transform: translateY(-1px); }
+    .fsubmit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+    .loading .spinner { display: block; }
+    .loading .btn-label { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fnote { text-align: center; font-size: 0.73rem; color: var(--ink-light); margin-top: 0.65rem; }
+    .ferror { background: #fff0f0; border: 1px solid #f5c0c0; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.84rem; color: #c0392b; margin-top: 0.75rem; display: none; }
+    .ferror.show { display: block; }
+    .fsuccess { display: none; text-align: center; padding: 2.5rem 1.5rem; }
+    .fsuccess.show { display: block; }
+    .fbody.hide { display: none; }
+    .fsuccess-ico { font-size: 2.75rem; margin-bottom: 0.85rem; }
+    .fsuccess h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .fsuccess p { color: var(--ink-mid); font-size: 0.875rem; }
+
+    /* ── Rendez-vous ── */
+    .rdv-wrap { max-width: 1160px; margin: 0 auto; padding: 3rem 2.5rem 6rem; display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; }
+    .rdv-info { position: sticky; top: 100px; }
+    .rdv-info h2 { font-size: 1.7rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.025em; }
+    .rdv-info > p { color: var(--ink-mid); font-weight: 300; line-height: 1.8; margin-bottom: 1.5rem; }
+    .rdv-steps { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.75rem; }
+    .rdv-step { display: flex; gap: 0.85rem; align-items: flex-start; }
+    .rdv-n { width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .rdv-step h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .rdv-step p { font-size: 0.82rem; color: var(--ink-mid); font-weight: 300; margin: 0; line-height: 1.5; }
+
+    .cal-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: var(--sh-lg); }
+    .cal-head { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem; }
+    .cal-head-ico { width: 36px; height: 36px; border-radius: 7px; background: var(--blue-dim); border: 1px solid rgba(34,81,204,0.12); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .cal-head h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.1rem; }
+    .cal-head p { font-size: 0.78rem; color: var(--ink-mid); margin: 0; }
+    .cal-frame { display: block; width: 100%; height: 600px; border: none; }
+    .cal-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 440px; padding: 3rem; text-align: center; background: var(--bg-alt); }
+    .cal-placeholder .big-ico { font-size: 3rem; margin-bottom: 1rem; }
+    .cal-placeholder h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.65rem; }
+    .cal-placeholder p { font-size: 0.875rem; color: var(--ink-mid); font-weight: 300; line-height: 1.75; max-width: 360px; margin-bottom: 1.5rem; }
+    .cal-placeholder code { font-size: 0.78rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 0.18rem 0.5rem; color: var(--blue); font-family: monospace; }
+
+    @media (max-width: 860px) {
+      .contact-wrap, .rdv-wrap { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; gap: 2rem; }
+      .cinfo, .rdv-info { position: static; }
+      .frow { grid-template-columns: 1fr; }
+      .cform-card { padding: 1.75rem; }
+      .page-tabs { flex-wrap: wrap; padding: 1.5rem 1.25rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="page-hero">
+  <span class="page-tag reveal">Premier entretien offert</span>
+  <h1 class="reveal d1">Contact &amp; <span style="color:var(--blue)">Rendez-vous</span></h1>
+  <p class="lead reveal d2">Envoyez un message ou réservez directement un créneau. Aucun engagement — 30 minutes offertes.</p>
+</section>
+
+<div class="page-tabs reveal">
+  <button class="ptab active" data-tab="contact">✉️ Envoyer un message</button>
+  <button class="ptab" data-tab="rdv">📆 Prendre rendez-vous</button>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div class="tab-section active" id="tab-contact">
+  <div class="contact-wrap">
+    <div class="cinfo">
+      <h2>Parlons de votre projet</h2>
+      <p>Établissement scolaire, entreprise ou parent cherchant un soutien — chaque demande reçoit une réponse personnalisée sous 24h.</p>
+      <div class="cmethods">
+        <a href="mailto:contact@latelieraugmente.fr" class="cmethod">
+          <div class="cmethod-ico">📧</div>
+          <div><h4>Email direct</h4><p>contact@latelieraugmente.fr</p></div>
+        </a>
+        <div class="cmethod">
+          <div class="cmethod-ico">📍</div>
+          <div><h4>Zone d'intervention</h4><p>Nancy, Grand Est (présentiel) · France entière (visio)</p></div>
+        </div>
+        <div class="cmethod">
+          <div class="cmethod-ico">⏱️</div>
+          <div><h4>Délai de réponse</h4><p>Sous 24h en jours ouvrés</p></div>
+        </div>
+      </div>
+      <div class="cpills">
+        <span class="cpill">✅ Entretien gratuit</span>
+        <span class="cpill">🔒 Sans engagement</span>
+        <span class="cpill">💬 Réponse rapide</span>
+        <span class="cpill">🗺️ Présentiel &amp; distanciel</span>
+      </div>
+    </div>
+
+    <div class="cform-card">
+      <div class="cform-hd">
+        <h3>Envoyez un message</h3>
+        <p>Votre message est envoyé directement par email, sans intermédiaire.</p>
+      </div>
+      <div class="fbody">
+        <div class="fgrp">
+          <label>Sujet de votre demande</label>
+          <div class="schips">
+            <button type="button" class="schip" data-v="Formation Workspace / IA">Formation Workspace / IA</button>
+            <button type="button" class="schip" data-v="Apps Script">Apps Script</button>
+            <button type="button" class="schip" data-v="Soutien scolaire">Soutien scolaire</button>
+            <button type="button" class="schip" data-v="Boutique / Outils">Boutique / Outils</button>
+            <button type="button" class="schip" data-v="Autre">Autre</button>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fgrp"><label for="prenom">Prénom *</label><input type="text" id="prenom" placeholder="Marie" required></div>
+          <div class="fgrp"><label for="nom">Nom *</label><input type="text" id="nom" placeholder="Dupont" required></div>
+        </div>
+        <div class="fgrp"><label for="email">Email *</label><input type="email" id="email" placeholder="marie.dupont@lycee.fr" required></div>
+        <div class="fgrp"><label for="structure">Établissement / Entreprise</label><input type="text" id="structure" placeholder="Lycée Jean Zay, Nancy"></div>
+        <div class="fgrp"><label for="message">Message *</label><textarea id="message" placeholder="Décrivez brièvement votre besoin..." required></textarea></div>
+        <div class="ferror" id="ferror"></div>
+        <button class="fsubmit" id="fsubmit" onclick="sendForm()">
+          <span class="spinner"></span>
+          <span class="btn-label">Envoyer le message →</span>
+        </button>
+        <p class="fnote">Vos données sont utilisées uniquement pour vous répondre. Aucune transmission à des tiers.</p>
+      </div>
+      <div class="fsuccess">
+        <div class="fsuccess-ico">✅</div>
+        <h3>Message envoyé !</h3>
+        <p>Merci ! Vous recevrez une confirmation et nous vous répondrons sous 24h en jours ouvrés.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RENDEZ-VOUS ══ -->
+<div class="tab-section" id="tab-rdv">
+  <div class="rdv-wrap">
+    <div class="rdv-info">
+      <h2>Réservez un créneau</h2>
+      <p>Choisissez directement un horaire disponible dans l'agenda. L'entretien de découverte (30 min) est entièrement gratuit.</p>
+      <div class="rdv-steps">
+        <div class="rdv-step">
+          <div class="rdv-n">1</div>
+          <div><h4>Choisissez un créneau</h4><p>Sélectionnez une date et une heure disponibles.</p></div>
+        </div>
+        <div class="rdv-step">
+          <div class="rdv-n">2</div>
+          <div><h4>Renseignez vos informations</h4><p>Nom, email et brève description de votre besoin.</p></div>
+        </div>
+        <div class="rdv-step">
+          <div class="rdv-n">3</div>
+          <div><h4>Confirmation automatique</h4><p>Vous recevez un email avec le lien de visioconférence.</p></div>
+        </div>
+      </div>
+      <div class="cmethods">
+        <div class="cmethod">
+          <div class="cmethod-ico">⏱️</div>
+          <div><h4>Durée</h4><p>30 minutes — offert, sans engagement</p></div>
+        </div>
+        <div class="cmethod">
+          <div class="cmethod-ico">💻</div>
+          <div><h4>Format</h4><p>Google Meet ou présentiel à Nancy</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cal-block">
+      <div class="cal-head">
+        <div class="cal-head-ico">📆</div>
+        <div>
+          <h3>Agenda L'Atelier Augmenté</h3>
+          <p>Sélectionnez votre créneau ci-dessous</p>
+        </div>
+      </div>
+
+      <!--
+      ══════════════════════════════════════════════════════════════
+        COMMENT AJOUTER VOTRE GOOGLE CALENDAR :
+
+        1. Dans Google Agenda, créez un "Appointment schedule"
+           (+ Nouveau > Horaires de rendez-vous)
+        2. Configurez vos disponibilités et la durée (30 min)
+        3. Cliquez sur "Ouvrir la page de réservation"
+        4. Copiez l'URL de la page
+        5. Remplacez VOTRE_LIEN_GOOGLE_CALENDAR dans l'iframe ci-dessous
+        6. Supprimez le bloc <div class="cal-placeholder"> et
+           décommentez la balise <iframe>
+
+        Exemple d'URL :
+        https://calendar.google.com/calendar/appointments/schedules/AcZssZ...
+      ══════════════════════════════════════════════════════════════
+      -->
+
+      <!-- Google Calendar Appointment Scheduling -->
+      <iframe class="cal-frame"
+        src="https://calendar.app.google/9gLqKrrfBrm8RXVk8"
+        frameborder="0"
+        scrolling="yes"
+        title="Agenda L'Atelier Augmenté"
+        style="border:none;width:100%;height:600px;">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="shared.js"></script>
+<script>
+  // ── Onglets ──
+  document.querySelectorAll('.ptab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+    });
+  });
+  // Ouverture directe sur l'onglet RDV si ?tab=rdv dans l'URL
+  if (new URLSearchParams(location.search).get('tab') === 'rdv') {
+    document.querySelector('[data-tab="rdv"]').click();
+  }
+
+  // ── Chips sujet ──
+  document.querySelectorAll('.schip').forEach(c => {
+    c.addEventListener('click', function() {
+      document.querySelectorAll('.schip').forEach(x => x.classList.remove('sel'));
+      this.classList.add('sel');
+    });
+  });
+
+  // ── Envoi EmailJS ──
+  async function sendForm() {
+    var prenom  = document.getElementById('prenom').value.trim();
+    var nom     = document.getElementById('nom').value.trim();
+    var email   = document.getElementById('email').value.trim();
+    var msg     = document.getElementById('message').value.trim();
+    var struc   = document.getElementById('structure').value.trim();
+    var sujet   = document.querySelector('.schip.sel')?.dataset.v || 'Non précisé';
+    var errEl   = document.getElementById('ferror');
+    var btn     = document.getElementById('fsubmit');
+
+    errEl.classList.remove('show');
+
+    if (!prenom || !nom || !email || !msg) {
+      errEl.textContent = 'Merci de remplir tous les champs obligatoires (*).';
+      errEl.classList.add('show'); return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errEl.textContent = 'Adresse email invalide.';
+      errEl.classList.add('show'); return;
+    }
+    if (EJS_KEY === 'VOTRE_PUBLIC_KEY') {
+      errEl.textContent = 'Configuration EmailJS manquante. Voir les commentaires dans contact.html.';
+      errEl.classList.add('show'); return;
+    }
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+
+    try {
+      await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
+        from_name:  prenom + ' ' + nom,
+        from_email: email,
+        structure:  struc || 'Non renseigné',
+        sujet:      sujet,
+        message:    msg,
+        reply_to:   email
+      });
+      document.querySelector('.fbody').classList.add('hide');
+      document.querySelector('.fsuccess').classList.add('show');
+    } catch (err) {
+      errEl.textContent = 'Erreur lors de l\'envoi. Réessayez ou écrivez à contact@latelieraugmente.fr';
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  }
+</script>
+</body>
+</html>

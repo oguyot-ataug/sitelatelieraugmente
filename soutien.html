@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soutien Scolaire — L'Atelier Augmenté</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* Niveaux */
+    .levels { padding: 4.5rem 2.5rem; max-width: 1160px; margin: 0 auto; }
+    .level-track { display: flex; gap: 0; overflow-x: auto; margin-top: 2.5rem; position: relative; padding-bottom: 0.5rem; }
+    .level-track::before { content: ''; position: absolute; top: 25px; left: 0; right: 0; height: 1px; background: var(--border-md); }
+    .lvl { flex: 1; min-width: 80px; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; position: relative; z-index: 1; cursor: pointer; }
+    .lvl-dot { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.75rem; font-weight: 700; background: var(--bg-card); border: 2px solid var(--border-md); color: var(--ink-light); transition: all 0.25s; box-shadow: var(--sh-sm); }
+    .lvl:hover .lvl-dot, .lvl.active .lvl-dot { border-color: var(--blue); color: var(--blue); box-shadow: 0 0 0 4px var(--blue-dim), var(--sh-sm); }
+    .lvl-label { font-size: 0.7rem; color: var(--ink-light); text-align: center; }
+
+    /* Matières */
+    .subjects { padding: 2.5rem 2.5rem 5rem; }
+    .subjects-inner { max-width: 1160px; margin: 0 auto; }
+    .subjects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+    .scrd {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 2.5rem; box-shadow: var(--sh-sm);
+      transition: box-shadow 0.22s, transform 0.22s;
+      border-top: 3px solid var(--scrd-top, var(--blue));
+    }
+    .scrd:hover { box-shadow: var(--sh-md); transform: translateY(-4px); }
+    .scrd.nsi { --scrd-top: var(--terra); }
+    .stag { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.26rem 0.7rem; border-radius: 4px; margin-bottom: 1rem; font-family: 'Geist', system-ui, sans-serif; }
+    .scrd:not(.nsi) .stag { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(34,81,204,0.15); }
+    .scrd.nsi .stag { background: var(--terra-dim); color: var(--terra); border: 1px solid rgba(191,90,43,0.15); }
+    .scrd h2 { font-size: 1.65rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--ink); }
+    .scrd p { font-size: 0.9rem; color: var(--ink-mid); font-weight: 300; line-height: 1.8; margin-bottom: 1.25rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.75rem; }
+    .chip { font-size: 0.75rem; padding: 0.25rem 0.65rem; border-radius: 4px; }
+    .scrd:not(.nsi) .chip { background: var(--blue-dim2); color: var(--blue); border: 1px solid rgba(34,81,204,0.12); }
+    .scrd.nsi .chip { background: var(--terra-dim); color: var(--terra); border: 1px solid rgba(191,90,43,0.12); }
+
+    /* Formats */
+    .formats { padding: 5rem 2.5rem; background: var(--bg-alt); }
+    .formats-inner { max-width: 1160px; margin: 0 auto; }
+    .fgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 2.5rem; }
+    .fcrd { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 2rem; text-align: center; box-shadow: var(--sh-sm); transition: box-shadow 0.22s, transform 0.22s; }
+    .fcrd:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+    .fcrd .ico { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .fcrd h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .fcrd p { font-size: 0.875rem; color: var(--ink-mid); font-weight: 300; line-height: 1.75; }
+
+    /* Méthode + citation */
+    .method { padding: 5rem 2.5rem; background: var(--bg); }
+    .method-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .msteps { display: flex; flex-direction: column; gap: 1.5rem; }
+    .mstep { display: flex; gap: 1rem; align-items: flex-start; }
+    .mstep-ico { width: 40px; height: 40px; border-radius: 8px; background: var(--blue-dim); border: 1px solid rgba(34,81,204,0.14); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .mstep h4 { font-size: 0.93rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .mstep p { font-size: 0.84rem; color: var(--ink-mid); font-weight: 300; line-height: 1.65; }
+    .quote-card { background: var(--blue); border-radius: 10px; padding: 2.75rem; color: #fff; position: relative; overflow: hidden; }
+    .quote-card::before { content: '\201C'; position: absolute; top: -0.5rem; left: 1.5rem; font-size: 8rem; font-family: 'Plus Jakarta Sans', sans-serif; color: rgba(255,255,255,0.1); line-height: 1; pointer-events: none; }
+    .quote-card blockquote { font-size: 1rem; font-style: italic; color: rgba(255,255,255,0.9); line-height: 1.85; margin-bottom: 1.5rem; font-weight: 300; }
+    .quote-card cite { font-size: 0.8rem; color: rgba(255,255,255,0.55); font-style: normal; display: flex; align-items: center; gap: 0.5rem; }
+    .quote-card cite::before { content: ''; display: block; width: 20px; height: 1px; background: rgba(255,255,255,0.35); }
+
+    /* CTA */
+    .scta { padding: 6rem 2.5rem; text-align: center; background: var(--bg-alt); }
+    .scta h2 { font-size: clamp(1.8rem, 3.2vw, 2.8rem); font-weight: 700; margin-bottom: 1rem; }
+    .scta p { color: var(--ink-mid); font-weight: 300; max-width: 460px; margin: 0 auto 2rem; line-height: 1.8; }
+    .scta-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+    @media (max-width: 860px) {
+      .subjects-grid, .method-inner { grid-template-columns: 1fr; }
+      .fgrid { grid-template-columns: 1fr; }
+      .levels, .subjects, .formats, .method, .scta { padding-left: 1.25rem; padding-right: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="page-hero">
+  <span class="page-tag reveal">Professeur certifié depuis 1998</span>
+  <h1 class="reveal d1">Soutien Scolaire <span style="color:var(--blue)">de Haut Niveau</span></h1>
+  <p class="lead reveal d2">Mathématiques et NSI, de la 6ème à la Terminale. Méthodologie rigoureuse par un professeur expérimenté pour garantir la réussite.</p>
+  <div class="reveal d3"><a href="contact.html" class="btn btn-primary">Prendre rendez-vous</a></div>
+</section>
+
+<section class="levels">
+  <span class="section-tag reveal">Niveaux</span>
+  <h2 class="section-title reveal d1">Du collège à la Terminale</h2>
+  <div class="level-track reveal d2">
+    <div class="lvl active"><div class="lvl-dot">6ème</div><span class="lvl-label">Collège</span></div>
+    <div class="lvl"><div class="lvl-dot">5ème</div><span class="lvl-label">Collège</span></div>
+    <div class="lvl"><div class="lvl-dot">4ème</div><span class="lvl-label">Collège</span></div>
+    <div class="lvl"><div class="lvl-dot">3ème</div><span class="lvl-label">Brevet</span></div>
+    <div class="lvl"><div class="lvl-dot">2nde</div><span class="lvl-label">Lycée</span></div>
+    <div class="lvl"><div class="lvl-dot">1ère</div><span class="lvl-label">Lycée</span></div>
+    <div class="lvl"><div class="lvl-dot">Tle</div><span class="lvl-label">Bac</span></div>
+  </div>
+</section>
+
+<section class="subjects">
+  <div class="subjects-inner">
+    <span class="section-tag reveal">Matières</span>
+    <h2 class="section-title reveal d1">Deux disciplines,<br>une expertise complète</h2>
+    <div class="subjects-grid">
+      <div class="scrd reveal">
+        <span class="stag">Mathématiques</span>
+        <h2>Maths</h2>
+        <p>Plus de 25 ans de pratique en classe. Du calcul littéral au raisonnement par récurrence, chaque notion est travaillée avec méthode et bienveillance.</p>
+        <div class="chips"><span class="chip">Algèbre</span><span class="chip">Géométrie</span><span class="chip">Probabilités</span><span class="chip">Analyse</span><span class="chip">Suites</span><span class="chip">Fonctions</span><span class="chip">Statistiques</span><span class="chip">Complexes</span></div>
+        <a href="contact.html" class="btn btn-primary">Réserver un cours</a>
+      </div>
+      <div class="scrd nsi reveal d1">
+        <span class="stag">NSI</span>
+        <h2>Numérique &amp; Sciences Informatiques</h2>
+        <p>Spécialité de lycée depuis 2019. Algorithmique, Python, structures de données — par un expert qui a accompagné la réforme ISN → NSI de l'intérieur.</p>
+        <div class="chips"><span class="chip">Python</span><span class="chip">Algorithmique</span><span class="chip">Structures de données</span><span class="chip">SQL</span><span class="chip">Réseaux</span><span class="chip">Architecture</span><span class="chip">HTML/CSS/JS</span></div>
+        <a href="contact.html" class="btn btn-accent">Réserver un cours</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="formats">
+  <div class="formats-inner">
+    <span class="section-tag reveal">Modalités</span>
+    <h2 class="section-title reveal d1">À votre rythme, selon vos besoins</h2>
+    <div class="fgrid">
+      <div class="fcrd reveal"><span class="ico">👤</span><h3>Cours individuel</h3><p>Un suivi personnalisé. Chaque séance est adaptée au niveau, au rythme et aux lacunes spécifiques de l'élève.</p></div>
+      <div class="fcrd reveal d1"><span class="ico">👥</span><h3>Cours en groupe</h3><p>Des petits groupes (2 à 4 élèves) pour une dynamique collaborative et un coût réduit pour les familles.</p></div>
+      <div class="fcrd reveal d2"><span class="ico">💻</span><h3>Visioconférence</h3><p>Tableau blanc interactif, partage d'écran, exercices en temps réel. L'efficacité du présentiel, à distance.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="method">
+  <div class="method-inner">
+    <div class="msteps">
+      <div><span class="section-tag reveal">Philosophie</span><h2 class="section-title reveal d1">La méthode<br>qui fait la différence</h2></div>
+      <div class="mstep reveal"><div class="mstep-ico">🔍</div><div><h4>Diagnostic initial</h4><p>Identification précise des lacunes et des points forts pour construire un plan de progression personnalisé.</p></div></div>
+      <div class="mstep reveal d1"><div class="mstep-ico">🎯</div><div><h4>Objectifs clairs</h4><p>Chaque séance a un objectif mesurable. L'élève sait ce qu'il doit maîtriser avant de passer à la suite.</p></div></div>
+      <div class="mstep reveal d2"><div class="mstep-ico">🔄</div><div><h4>Répétition espacée</h4><p>Les notions reviennent régulièrement sous différentes formes pour ancrer les automatismes durablement.</p></div></div>
+      <div class="mstep reveal d3"><div class="mstep-ico">💬</div><div><h4>Communication famille</h4><p>Compte-rendu régulier et transparence totale sur la progression et les axes d'amélioration.</p></div></div>
+    </div>
+    <div class="quote-card reveal d2">
+      <blockquote>"Mon objectif n'est pas de faire les exercices à la place de l'élève, mais de lui donner les outils pour les résoudre seul. L'autonomie, c'est la vraie réussite."</blockquote>
+      <cite>Olivier Guyot — Professeur certifié, 25 ans d'expérience</cite>
+    </div>
+  </div>
+</section>
+
+<section class="scta">
+  <span class="section-tag reveal" style="display:block">Démarrer</span>
+  <h2 class="reveal d1">Premier cours d'essai sans engagement</h2>
+  <p class="reveal d2">Prenez contact pour discuter des besoins de votre enfant. Le premier entretien est offert.</p>
+  <div class="scta-actions reveal d3">
+    <a href="contact.html" class="btn btn-primary">Prendre rendez-vous →</a>
+    <a href="mailto:contact@latelieraugmente.fr" class="btn btn-outline">Envoyer un email</a>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="shared.js"></script>
+<script>
+  document.querySelectorAll('.lvl').forEach(l => {
+    l.addEventListener('click', function() {
+      document.querySelectorAll('.lvl').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

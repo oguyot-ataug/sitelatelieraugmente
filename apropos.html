@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>À propos — L'Atelier Augmenté</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .bio { max-width: 1160px; margin: 0 auto; padding: 4.5rem 2.5rem; display: grid; grid-template-columns: 300px 1fr; gap: 5rem; align-items: start; }
+    .bio-card { position: sticky; top: 100px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: var(--sh-md); }
+    .bio-top { background: var(--blue); padding: 2rem; text-align: center; position: relative; overflow: hidden; }
+    .bio-top::after { content: ''; position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,0.07); }
+    .bio-avatar { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 0.85rem; }
+    .bio-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+    .bio-role { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 0.3rem; line-height: 1.5; }
+    .bio-sgrid { display: grid; grid-template-columns: 1fr 1fr; }
+    .bio-s { padding: 1.25rem 1.35rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .bio-s:nth-child(even) { border-right: none; }
+    .bio-s:nth-child(3), .bio-s:nth-child(4) { border-bottom: none; }
+    .bio-s-n { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--blue); letter-spacing: -0.03em; }
+    .bio-s-l { font-size: 0.72rem; color: var(--ink-light); margin-top: 0.2rem; line-height: 1.4; }
+    .bio-contact { padding: 1rem 1.35rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--ink-mid); text-align: center; }
+
+
+    /* Timeline */
+    .tl { position: relative; }
+    .tl::before { content: ''; position: absolute; top: 0; bottom: 0; left: 10px; width: 1px; background: linear-gradient(180deg, var(--blue) 0%, rgba(34,81,204,0.1) 100%); }
+    .tl-item { position: relative; padding-left: 2.75rem; margin-bottom: 2.5rem; }
+    .tl-dot { position: absolute; left: 0; top: 2px; width: 22px; height: 22px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--blue); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; color: var(--blue); box-shadow: 0 0 0 3px var(--bg); }
+    .tl-year { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.07em; color: var(--blue); margin-bottom: 0.35rem; display: block; font-family: 'Geist', system-ui, sans-serif; text-transform: uppercase; }
+    .tl-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--ink); }
+    .tl-item p { font-size: 0.875rem; color: var(--ink-mid); font-weight: 300; line-height: 1.8; }
+
+    /* Piliers */
+    .pillars { background: var(--blue); padding: 6rem 2.5rem; }
+    .pillars-inner { max-width: 1160px; margin: 0 auto; }
+    .pillars h2 { color: #fff; text-align: center; margin-bottom: 3rem; }
+    .pgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+    .pcrd2 { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 2.25rem; color: #fff; position: relative; overflow: hidden; transition: background 0.2s, transform 0.2s; }
+    .pcrd2:hover { background: rgba(255,255,255,0.13); transform: translateY(-3px); }
+    .pcrd2-n { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 4.5rem; font-weight: 800; position: absolute; top: -0.5rem; right: 1rem; color: rgba(255,255,255,0.05); line-height: 1; pointer-events: none; }
+    .pcrd2 .ico { font-size: 1.75rem; margin-bottom: 1rem; display: block; }
+    .pcrd2 h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.55rem; }
+    .pcrd2 p { font-size: 0.86rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.75; }
+
+    /* Valeurs */
+    .values { padding: 6rem 2.5rem; background: var(--bg-alt); }
+    .values-inner { max-width: 1160px; margin: 0 auto; }
+    .vgrid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.25rem; margin-top: 2.5rem; }
+    .vcrd { display: flex; gap: 1rem; align-items: flex-start; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem; box-shadow: var(--sh-sm); transition: box-shadow 0.22s, transform 0.22s; }
+    .vcrd:hover { box-shadow: var(--sh-md); transform: translateY(-2px); }
+    .vcrd-ico { width: 40px; height: 40px; border-radius: 8px; background: var(--blue-dim); border: 1px solid rgba(34,81,204,0.12); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .vcrd h4 { font-size: 0.93rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .vcrd p { font-size: 0.84rem; color: var(--ink-mid); font-weight: 300; line-height: 1.7; }
+
+    /* ── Certifications ── */
+    .certs { padding: 5rem 2.5rem; background: var(--bg); }
+    .certs-inner { max-width: 1160px; margin: 0 auto; text-align: center; }
+    .certs-grid {
+      display: flex; justify-content: center; align-items: center;
+      gap: 2.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+    }
+    .cert-item {
+      display: inline-block; line-height: 0;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border-radius: 12px;
+    }
+    .cert-item:hover { transform: translateY(-4px) scale(1.04); }
+    .cert-item img {
+      width: 180px; height: 180px;
+      object-fit: contain; display: block;
+      /* Pas de filtre, pas de resize — laisser le navigateur afficher en net */
+    }
+    .certs-note { font-size: 0.78rem; color: var(--ink-light); font-weight: 300; }
+
+    @media (max-width: 900px) { .bio { grid-template-columns: 1fr; padding: 3rem 1.25rem; } .bio-card { position: static; } .pgrid { grid-template-columns: 1fr; } .vgrid { grid-template-columns: 1fr; } .pillars, .values { padding: 4.5rem 1.25rem; } }
+  </style>
+</head>
+<body>
+<div id="site-header"></div>
+<section class="page-hero">
+  <span class="page-tag reveal">Expert éducation &amp; numérique</span>
+  <h1 class="reveal d1">Qui suis-<span style="color:var(--blue)">je ?</span></h1>
+  <p class="lead reveal d2">25 ans de terrain, 18 ans de direction, une passion intacte pour les mathématiques et le numérique au service de l'éducation.</p>
+</section>
+<div class="bio">
+  <div class="bio-card reveal">
+    <div class="bio-top">
+      <div class="bio-avatar">👨‍🏫</div>
+      <div class="bio-name">Olivier Guyot</div>
+      <div class="bio-role">Fondateur · Professeur certifié<br>Expert numérique &amp; IA</div>
+    </div>
+    <div class="bio-sgrid">
+      <div class="bio-s"><div class="bio-s-n">1998</div><div class="bio-s-l">Début d'enseignement</div></div>
+      <div class="bio-s"><div class="bio-s-n">18 ans</div><div class="bio-s-l">Direction scolaire</div></div>
+      <div class="bio-s"><div class="bio-s-n">GWE</div><div class="bio-s-l">Expert Workspace Education</div></div>
+      <div class="bio-s"><div class="bio-s-n">IA</div><div class="bio-s-l">Formation intensive 2023-2025</div></div>
+    </div>
+    <div class="bio-contact">📧 contact@latelieraugmente.fr</div>
+  </div>
+  <div class="tl">
+    <div class="tl-item reveal"><div class="tl-dot">★</div><span class="tl-year">1998 — Les racines</span><h3>Professeur de Mathématiques</h3><p>Mon parcours prend racine sur le terrain en 1998. Ma double formation en mathématiques et informatique m'a très vite poussé à explorer comment la technologie pouvait servir l'enseignement — bien avant que ce soit à la mode.</p></div>
+    <div class="tl-item reveal d1"><div class="tl-dot">★</div><span class="tl-year">2007 – 2025 · 18 ans</span><h3>Directeur Adjoint</h3><p>18 années de direction au sein d'un établissement réputé de l'agglomération nancéienne. Une vision globale des enjeux scolaires : de la réussite des élèves à la gestion complexe des équipes administratives et pédagogiques.</p></div>
+    <div class="tl-item reveal d2"><div class="tl-dot">★</div><span class="tl-year">2010 — L'innovation</span><h3>Déploiement Google Workspace for Education</h3><p>Avec des collègues pionniers, nous avons déployé Google Workspace for Education, transformant nos méthodes de travail. Cette immersion m'a conduit à développer une expertise profonde en Google Apps Script pour concevoir des outils sur mesure.</p></div>
+    <div class="tl-item reveal d1"><div class="tl-dot">★</div><span class="tl-year">2019 — La réforme NSI</span><h3>Accompagner la transition ISN → NSI</h3><p>J'ai accompagné la réforme des spécialités numériques au lycée, de l'ISN vers la NSI (Numérique et Sciences Informatiques), dont je suis devenu l'un des enseignants référents dans mon établissement.</p></div>
+    <div class="tl-item reveal"><div class="tl-dot">★</div><span class="tl-year">2023 — Aujourd'hui</span><h3>L'Atelier Augmenté</h3><p>Convaincu que l'Intelligence Artificielle est le prochain grand levier de l'éducation, j'ai consacré deux années à me former intensivement sur l'IA pour en maîtriser les usages pédagogiques et productifs. Aujourd'hui professeur à mi-temps et entrepreneur passionné, avec l'ambition de construire, avec vous, une éducation "augmentée".</p></div>
+  </div>
+</div>
+
+<!-- ══ CERTIFICATIONS ══ -->
+<section class="certs">
+  <div class="certs-inner">
+    <span class="section-tag reveal" style="display:block;text-align:center">Certifications officielles</span>
+    <h2 class="section-title reveal d1" style="text-align:center;margin-bottom:2.5rem">Certifié par Google</h2>
+    <div class="certs-grid reveal d2">
+      <a href="https://credential.net/172645205" target="_blank" rel="noopener" class="cert-item">
+        <img src="https://api.accredible.com/v1/frontend/credential_website_embed_image/badge/172645205"
+             alt="Google Certified Educator" width="200" height="200" loading="lazy">
+      </a>
+      <a href="https://credential.net/175019638" target="_blank" rel="noopener" class="cert-item">
+        <img src="https://api.accredible.com/v1/frontend/credential_website_embed_image/badge/175019638"
+             alt="Google Certified Educator" width="200" height="200" loading="lazy">
+      </a>
+      <a href="https://credential.net/ed42081e-3ec7-472d-b969-fb2834ad3cf5#acc.nKZ2Q1D3" target="_blank" rel="noopener" class="cert-item">
+        <img src="https://api.accredible.com/v1/frontend/credential_website_embed_image/badge/175081050"
+             alt="Google Certified Educator" width="200" height="200" loading="lazy">
+      </a>
+    </div>
+    <p class="certs-note reveal d3">Cliquez sur un badge pour vérifier la certification</p>
+  </div>
+</section>
+
+<section class="pillars">
+  <div class="pillars-inner">
+    <span class="section-tag reveal" style="color:rgba(255,255,255,0.5);display:block;text-align:center">Notre mission</span>
+    <h2 class="section-title reveal d1" style="color:#fff;text-align:center;margin-bottom:3rem">Les trois piliers de L'Atelier Augmenté</h2>
+    <div class="pgrid">
+      <div class="pcrd2 reveal"><span class="pcrd2-n">01</span><span class="ico">🎓</span><h3>La Formation</h3><p>Accompagner enseignants, cadres et entreprises dans leur montée en compétences : Workspace Education, IA, Google Apps Script. À chaque problème, une solution concrète.</p></div>
+      <div class="pcrd2 reveal d1"><span class="pcrd2-n">02</span><span class="ico">📐</span><h3>L'Accompagnement</h3><p>Des cours particuliers de Mathématiques et de NSI avec une méthodologie éprouvée. L'excellence pédagogique au service de chaque élève, du collège à la Terminale.</p></div>
+      <div class="pcrd2 reveal d2"><span class="pcrd2-n">03</span><span class="ico">⚙️</span><h3>L'Innovation</h3><p>La création de produits numériques sur mesure : automatisations, outils de gestion pour établissements et professionnels. Des solutions qui vous appartiennent entièrement.</p></div>
+    </div>
+  </div>
+</section>
+<section class="values">
+  <div class="values-inner">
+    <span class="section-tag reveal">Mes valeurs</span>
+    <h2 class="section-title reveal d1">Ce qui guide chaque intervention</h2>
+    <div class="vgrid">
+      <div class="vcrd reveal"><div class="vcrd-ico">🎯</div><div><h4>Pragmatisme</h4><p>Les outils et formations sont construits sur du concret : des situations réelles vécues dans des établissements réels. Pas de théorie pour la théorie.</p></div></div>
+      <div class="vcrd reveal d1"><div class="vcrd-ico">🔑</div><div><h4>Autonomie</h4><p>L'objectif n'est pas de créer de la dépendance, mais de donner les clés. Après une formation, vous êtes souverain sur vos outils.</p></div></div>
+      <div class="vcrd reveal d2"><div class="vcrd-ico">🤝</div><div><h4>Proximité</h4><p>Un interlocuteur unique qui connaît votre contexte. Pas de centre d'appel, pas de ticket — une relation directe et humaine.</p></div></div>
+      <div class="vcrd reveal d3"><div class="vcrd-ico">🚀</div><div><h4>Avant-garde</h4><p>Veille permanente sur les évolutions de l'IA et des outils Google. Vous bénéficiez toujours des pratiques les plus récentes et les plus efficaces.</p></div></div>
+    </div>
+  </div>
+</section>
+<div id="site-footer"></div>
+<script src="shared.js"></script>
+</body></html>

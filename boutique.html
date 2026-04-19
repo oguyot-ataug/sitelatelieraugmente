@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique — L'Atelier Augmenté</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <!-- Stripe Buy Button -->
+  <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+  <style>
+    .shop { max-width: 1160px; margin: 0 auto; padding: 4rem 2.5rem 6rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .pcrd { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--sh-sm); transition: box-shadow 0.22s, transform 0.22s; position: relative; }
+    .pcrd:hover { box-shadow: var(--sh-md); transform: translateY(-5px); }
+    .pcrd:nth-child(1) { border-top: 3px solid var(--blue); }
+    .pcrd:nth-child(2) { border-top: 3px solid var(--terra); }
+    .pcrd:nth-child(3) { border-top: 3px solid var(--sage); }
+    .pcrd-badge { position: absolute; top: 1rem; right: 1rem; background: var(--blue); color: #fff; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 4px; }
+    .pcrd-body { padding: 1.75rem 1.75rem 0; flex: 1; }
+    .pcrd-icon { width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.1rem; }
+    .pcrd:nth-child(1) .pcrd-icon { background: var(--blue-dim); border: 1px solid rgba(34,81,204,0.12); }
+    .pcrd:nth-child(2) .pcrd-icon { background: var(--terra-dim); border: 1px solid rgba(191,90,43,0.12); }
+    .pcrd:nth-child(3) .pcrd-icon { background: var(--sage-dim); border: 1px solid rgba(61,140,110,0.12); }
+    .pcrd h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--ink); }
+    .pcrd-sub { font-size: 0.84rem; color: var(--ink-mid); font-weight: 300; line-height: 1.6; margin-bottom: 1.2rem; }
+    .pfeat { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .pfeat li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.83rem; color: var(--ink-mid); font-weight: 300; line-height: 1.5; }
+    .pfeat .ck { flex-shrink: 0; width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.48rem; font-weight: 700; margin-top: 2px; }
+    .pcrd:nth-child(1) .ck { background: var(--blue-dim); color: var(--blue); }
+    .pcrd:nth-child(2) .ck { background: var(--terra-dim); color: var(--terra); }
+    .pcrd:nth-child(3) .ck { background: var(--sage-dim); color: var(--sage); }
+    .pcrd-foot { padding: 1.5rem 1.75rem; border-top: 1px solid var(--border); margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.875rem; }
+    .price-row { display: flex; align-items: baseline; gap: 0.6rem; }
+    .price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.9rem; font-weight: 800; letter-spacing: -0.04em; }
+    .pcrd:nth-child(1) .price { color: var(--blue); }
+    .pcrd:nth-child(2) .price { color: var(--terra); }
+    .pcrd:nth-child(3) .price { color: var(--sage); }
+    .price-note { font-size: 0.76rem; color: var(--ink-light); }
+    .pcta { display: block; text-align: center; padding: 0.75rem; border-radius: 6px; font-size: 0.875rem; font-weight: 600; text-decoration: none; transition: all 0.2s; font-family: 'Geist', system-ui, sans-serif; }
+    .pcrd:nth-child(1) .pcta { background: var(--blue); color: #fff; }
+    .pcrd:nth-child(1) .pcta:hover { background: var(--blue-dark); box-shadow: var(--sh-blue); }
+    .pcrd:nth-child(2) .pcta { background: var(--terra); color: #fff; }
+    .pcrd:nth-child(2) .pcta:hover { opacity: 0.85; }
+    .pcrd:nth-child(3) .pcta { background: var(--sage); color: #fff; }
+    .pcrd:nth-child(3) .pcta:hover { opacity: 0.85; }
+
+    .guarantees { background: var(--blue); padding: 4rem 2.5rem; }
+    .ginner { max-width: 1160px; margin: 0 auto; }
+    .ginner h2 { color: #fff; text-align: center; margin-bottom: 2.5rem; }
+    .ggrid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; }
+    .gcrd { text-align: center; color: #fff; }
+    .gcrd .ico { font-size: 1.75rem; margin-bottom: 0.65rem; display: block; }
+    .gcrd h4 { font-size: 0.93rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .gcrd p { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+    /* Stripe button centering */
+    .stripe-wrap { text-align: center; }
+    stripe-buy-button { display: inline-block; }
+    .shop-cta { padding: 5.5rem 2.5rem; text-align: center; background: var(--bg-alt); }
+    .shop-cta h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 700; margin-bottom: 0.9rem; }
+    .shop-cta p { color: var(--ink-mid); font-weight: 300; max-width: 440px; margin: 0 auto 2rem; line-height: 1.8; }
+
+    @media (max-width: 900px) { .shop { grid-template-columns: 1fr; padding: 2.5rem 1.25rem; } .ggrid { grid-template-columns: 1fr 1fr; } .guarantees, /* Stripe button centering */
+    .stripe-wrap { text-align: center; }
+    stripe-buy-button { display: inline-block; }
+    .shop-cta { padding-left: 1.25rem; padding-right: 1.25rem; } }
+    @media (max-width: 500px) { .ggrid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="site-header"></div>
+<section class="page-hero">
+  <span class="page-tag reveal">Outils numériques</span>
+  <h1 class="reveal d1">La <span style="color:var(--blue)">Boutique</span></h1>
+  <p class="lead reveal d2">Des outils sur mesure pour enseignants et directions. Paiement unique, accès à vie — sans abonnement mensuel.</p>
+</section>
+<div class="shop">
+  <div class="pcrd reveal">
+    <span class="pcrd-badge">Populaire</span>
+    <div class="pcrd-body">
+      <div class="pcrd-icon">📧</div>
+      <h2>Publipostage Workspace</h2>
+      <p class="pcrd-sub">Système de publipostage premium pour Google Sheets — envois d'emails personnalisés en masse directement depuis votre interface Google.</p>
+      <ul class="pfeat">
+        <li><span class="ck">✓</span> Template Google Sheets optimisé, clé en main</li>
+        <li><span class="ck">✓</span> Script Apps Script intégré et prêt à l'emploi</li>
+        <li><span class="ck">✓</span> Envoi d'emails 100% personnalisés via Gmail</li>
+        <li><span class="ck">✓</span> Guide d'installation pas à pas inclus</li>
+        <li><span class="ck">✓</span> Gestion de modèles illimitée</li>
+        <li><span class="ck">✓</span> Mises à jour gratuites à vie</li>
+        <li><span class="ck">✓</span> Support technique réactif</li>
+      </ul>
+    </div>
+    <div class="pcrd-foot">
+      <div class="price-row"><span class="price">29€</span><span class="price-note">paiement unique · accès à vie</span></div>
+      <div class="stripe-wrap">
+        <stripe-buy-button
+          buy-button-id="buy_btn_1T18iB3TRQxnnzloeecMkOYs"
+          publishable-key="pk_live_51T17VO3TRQxnnzlopsTepUyvV9WPwz3FVJlYby6fucl0cEKiuxSUaTWzulE9GqLyUGbkcw0roYqSo8352WDfgxPC00LxQp6HAz">
+        </stripe-buy-button>
+      </div>
+    </div>
+  </div>
+  <div class="pcrd reveal d1">
+    <div class="pcrd-body">
+      <div class="pcrd-icon">🤖</div>
+      <h2>Appréciations IA École Directe</h2>
+      <p class="pcrd-sub">Extension Chrome pour profs : automatisez vos appréciations avec l'IA. Une classe entière en quelques minutes au lieu de plusieurs heures.</p>
+      <ul class="pfeat">
+        <li><span class="ck">✓</span> Génération automatique basée sur le profil élève</li>
+        <li><span class="ck">✓</span> Contrôle total du ton via prompt personnalisable</li>
+        <li><span class="ck">✓</span> Votre propre clé API OpenAI (payez ce que vous consommez)</li>
+        <li><span class="ck">✓</span> Données traitées localement — vie privée respectée</li>
+        <li><span class="ck">✓</span> Installation facile, guide complet inclus</li>
+        <li><span class="ck">✓</span> Licence à vie, sans abonnement</li>
+      </ul>
+    </div>
+    <div class="pcrd-foot">
+      <div class="price-row"><span class="price">19€</span><span class="price-note">+ clé API OpenAI personnelle (~5$/an)</span></div>
+      <div class="stripe-wrap">
+        <!-- Remplacez buy-button-id par l'ID de votre 2e bouton Stripe -->
+        <stripe-buy-button
+          buy-button-id="VOTRE_BUY_BUTTON_ID_APPRECIATIONS"
+          publishable-key="pk_live_51T17VO3TRQxnnzlopsTepUyvV9WPwz3FVJlYby6fucl0cEKiuxSUaTWzulE9GqLyUGbkcw0roYqSo8352WDfgxPC00LxQp6HAz">
+        </stripe-buy-button>
+      </div>
+    </div>
+  </div>
+  <div class="pcrd reveal d2">
+    <div class="pcrd-body">
+      <div class="pcrd-icon">💳</div>
+      <h2>Moneta</h2>
+      <p class="pcrd-sub">Gérez et analysez vos comptes bancaires simplement. Un outil de suivi financier personnel élégant et efficace.</p>
+      <ul class="pfeat">
+        <li><span class="ck">✓</span> Interface claire et intuitive</li>
+        <li><span class="ck">✓</span> Catégorisation automatique des dépenses</li>
+        <li><span class="ck">✓</span> Tableaux de bord visuels</li>
+        <li><span class="ck">✓</span> Import de relevés bancaires</li>
+        <li><span class="ck">✓</span> Données stockées localement</li>
+        <li><span class="ck">✓</span> Accès à vie inclus</li>
+      </ul>
+    </div>
+    <div class="pcrd-foot">
+      <div class="price-row"><span class="price">Bientôt</span></div>
+      <!-- Moneta pas encore disponible — formulaire de notification -->
+<a href="contact.html?tab=contact" class="pcta">Être notifié →</a>
+    </div>
+  </div>
+</div>
+<section class="guarantees">
+  <div class="ginner">
+    <h2 class="section-title reveal" style="color:#fff;text-align:center">Achetez en toute confiance</h2>
+    <div class="ggrid">
+      <div class="gcrd reveal"><span class="ico">♾️</span><h4>Accès à vie</h4><p>Un seul paiement, pour toujours. Aucun abonnement, aucune surprise.</p></div>
+      <div class="gcrd reveal d1"><span class="ico">🔄</span><h4>Mises à jour gratuites</h4><p>Les outils évoluent avec Google Workspace, sans surcoût.</p></div>
+      <div class="gcrd reveal d2"><span class="ico">🛡️</span><h4>Données sécurisées</h4><p>Vos données restent dans votre écosystème Google. Aucune fuite possible.</p></div>
+      <div class="gcrd reveal d3"><span class="ico">💬</span><h4>Support réactif</h4><p>Une question ? Nous répondons sous 24h en semaine.</p></div>
+    </div>
+  </div>
+</section>
+<section class="shop-cta">
+  <span class="section-tag reveal" style="display:block">Besoin spécifique ?</span>
+  <h2 class="reveal d1">Un outil sur mesure pour votre établissement</h2>
+  <p class="reveal d2">Un processus répétitif, une tâche chronophage ? Nous concevons des solutions Apps Script taillées pour votre réalité.</p>
+  <div class="reveal d3" style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+    <a href="contact.html" class="btn btn-primary">Parlez-nous de votre projet</a>
+    <a href="formations.html" class="btn btn-outline">Voir les formations</a>
+  </div>
+</section>
+<div id="site-footer"></div>
+<script src="shared.js"></script>
+</body></html>
