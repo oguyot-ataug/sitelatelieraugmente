@@ -67,12 +67,12 @@ nav.scrolled {
 
 /* Icône logo : rogne le bas (texte du fichier image) */
 .logo-icon-wrap {
-  width: 46px; height: 46px; overflow: hidden; flex-shrink: 0;
-  display: flex; align-items: flex-start; justify-content: center;
+  width: 54px; height: 48px; overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: flex-start; justify-content: flex-start;
 }
 .logo-icon-wrap img {
-  width: 106px; height: auto;
-  margin-top: -3px; margin-left: -28px; display: block;
+  width: 96px; height: auto;
+  margin-top: -2px; margin-left: 0; display: block;
 }
 
 /* Texte du logo — une seule ligne, sans italique */
