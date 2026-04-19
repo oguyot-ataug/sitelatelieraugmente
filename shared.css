@@ -77,21 +77,18 @@ nav.scrolled {
 
 /* Texte du logo — une seule ligne, sans italique */
 .logo-text {
-  display: flex; align-items: baseline; gap: 0.3em;
+  display: flex; align-items: baseline; gap: 0.35em;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800; font-style: normal;
-  font-size: 0.95rem; letter-spacing: 0.04em;
+  font-size: 0.95rem; letter-spacing: 0.05em;
   text-transform: uppercase; white-space: nowrap;
   line-height: 1;
 }
-.logo-part1 {
-  color: #7c8f9e;   /* gris argenté — comme l'engrenage */
-  font-style: normal;
+.logo-text span {
+  font-style: normal !important;
 }
-.logo-part2 {
-  color: #1a9cdb;   /* bleu néon — comme le cerveau */
-  font-style: normal;
-}
+.logo-part1 { color: #7c8f9e !important; }
+.logo-part2 { color: #1a9cdb !important; }
 
 /* Footer logo span */
 .nav-logo > span:not(.logo-text) {
