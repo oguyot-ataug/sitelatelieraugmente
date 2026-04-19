@@ -60,14 +60,44 @@ nav.scrolled {
   box-shadow: var(--sh-sm);
 }
 .nav-logo {
-  display: flex; align-items: center; gap: 0.65rem;
+  display: flex; align-items: center; gap: 0.5rem;
   text-decoration: none; flex-shrink: 0;
 }
 .nav-logo img { height: 48px; width: auto; display: block; }
-.nav-logo span {
+
+/* Icône logo : rogne le bas (texte du fichier image) */
+.logo-icon-wrap {
+  width: 46px; height: 46px; overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: flex-start; justify-content: center;
+}
+.logo-icon-wrap img {
+  width: 106px; height: auto;
+  margin-top: -3px; margin-left: -28px; display: block;
+}
+
+/* Texte du logo — une seule ligne, sans italique */
+.logo-text {
+  display: flex; align-items: baseline; gap: 0.3em;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.95rem; font-weight: 700;
-  color: var(--ink); letter-spacing: -0.025em;
+  font-weight: 800; font-style: normal;
+  font-size: 0.95rem; letter-spacing: 0.04em;
+  text-transform: uppercase; white-space: nowrap;
+  line-height: 1;
+}
+.logo-part1 {
+  color: #7c8f9e;   /* gris argenté — comme l'engrenage */
+  font-style: normal;
+}
+.logo-part2 {
+  color: #1a9cdb;   /* bleu néon — comme le cerveau */
+  font-style: normal;
+}
+
+/* Footer logo span */
+.nav-logo > span:not(.logo-text) {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  color: rgba(250,247,242,0.85); letter-spacing: -0.02em;
 }
 .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
 .nav-links a {
