@@ -1,6 +1,6 @@
 // ===== shared.js — L'Atelier Augmenté =====
 
-// ── Chargement header et footer depuis fichiers partagés ──
+// ── Chargement header et footer ──
 function loadPartial(selector, file, callback) {
   const el = document.querySelector(selector);
   if (!el) return;
@@ -13,7 +13,7 @@ function loadPartial(selector, file, callback) {
     .catch(() => console.warn('Partial non trouvé :', file));
 }
 
-// Marquer le lien actif dans la nav
+// Lien actif dans la nav
 function setActiveNav() {
   const page = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(a => {
@@ -21,51 +21,82 @@ function setActiveNav() {
   });
 }
 
-// Init nav et footer
-loadPartial('#site-header', 'header.html', () => {
-  setActiveNav();
-  initBurger();
-});
-loadPartial('#site-footer', 'footer.html');
-
-// ── Nav scroll shadow ──
-window.addEventListener('scroll', () => {
-  const nav = document.querySelector('nav');
-  if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
-}, { passive: true });
-
-// ── Burger menu mobile ──
+// Burger menu
 function initBurger() {
   const burger = document.querySelector('.nav-burger');
   const navLinks = document.querySelector('.nav-links');
   if (!burger || !navLinks) return;
-  burger.addEventListener('click', () => {
-    const open = navLinks.classList.toggle('open');
-    const [s1, s2, s3] = burger.querySelectorAll('span');
-    if (open) {
-      s1.style.transform = 'translateY(6.5px) rotate(45deg)';
-      s2.style.opacity = '0';
-      s3.style.transform = 'translateY(-6.5px) rotate(-45deg)';
-    } else {
-      [s1, s2, s3].forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+
+  // Supprimer anciens listeners en clonant
+  const newBurger = burger.cloneNode(true);
+  burger.parentNode.replaceChild(newBurger, burger);
+
+  function openMenu() {
+    navLinks.classList.add('open');
+    document.body.style.overflow = 'hidden'; // bloquer scroll fond
+    const [s1, s2, s3] = newBurger.querySelectorAll('span');
+    s1.style.transform = 'translateY(6.5px) rotate(45deg)';
+    s2.style.opacity = '0';
+    s3.style.transform = 'translateY(-6.5px) rotate(-45deg)';
+  }
+
+  function closeMenu() {
+    navLinks.classList.remove('open');
+    document.body.style.overflow = '';
+    newBurger.querySelectorAll('span').forEach(s => {
+      s.style.transform = '';
+      s.style.opacity = '';
+    });
+  }
+
+  newBurger.addEventListener('click', () => {
+    navLinks.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  // Fermer au clic sur un lien
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', closeMenu);
+  });
+
+  // Fermer en cliquant en dehors
+  document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('open')
+        && !navLinks.contains(e.target)
+        && !newBurger.contains(e.target)) {
+      closeMenu();
     }
   });
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      burger.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
-    });
+
+  // Fermer avec la touche Echap
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
   });
 }
 
+// ── Chargement des partials ──
+loadPartial('#site-header', 'header.html', () => {
+  setActiveNav();
+  initBurger();
+  // Nav scroll shadow (après injection header)
+  const nav = document.querySelector('nav');
+  if (nav) {
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+  }
+});
+loadPartial('#site-footer', 'footer.html');
+
 // ── Scroll reveal ──
-const observer = new IntersectionObserver(entries => {
+const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObserver.unobserve(e.target);
+    }
   });
 }, { threshold: 0.07, rootMargin: '0px 0px -20px 0px' });
 
-// Observer déclenché après chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 });
