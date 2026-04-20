@@ -1,8 +1,17 @@
+<!-- Overlay sombre derrière le menu mobile -->
+<div class="nav-overlay" id="nav-overlay"></div>
+
 <nav>
   <a href="index.html" class="nav-logo">
-    <img src="Logo_transp.png" alt="L'Atelier Augmenté">
+    <div class="logo-icon-wrap">
+      <img src="Logo_transp.png" alt="L'Atelier Augmenté">
+    </div>
+    <span class="logo-text">
+      <span style="color:#7c8f9e;font-style:normal;font-weight:800;">L'ATELIER</span>
+      <span style="color:#1a9cdb;font-style:normal;font-weight:800;">AUGMENTÉ</span>
+    </span>
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="index.html">Accueil</a></li>
     <li><a href="formations.html">Formations</a></li>
     <li><a href="soutien.html">Soutien scolaire</a></li>
@@ -10,5 +19,7 @@
     <li><a href="apropos.html">À propos</a></li>
     <li><a href="contact.html" class="nav-cta">Rendez-vous 📆</a></li>
   </ul>
-  <button class="nav-burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <button class="nav-burger" id="nav-burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
