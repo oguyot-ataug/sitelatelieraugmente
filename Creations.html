@@ -1,1 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sites & Applications sur mesure — L'Atelier Augmenté</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
 
+    /* ── Hero spécifique ── */
+    .hero-creation {
+      background: linear-gradient(135deg, #0d1a4a 0%, #2251cc 50%, #1a9cdb 100%);
+      padding: 9rem 2.5rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-creation::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(26,156,219,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(34,81,204,0.3) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-creation .page-tag {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .hero-creation h1 { color: #fff; font-size: clamp(2rem, 5vw, 3rem); }
+    .hero-creation .lead { color: rgba(255,255,255,0.75); max-width: 660px; margin: 0 auto 2rem; }
+
+    /* ── Phrase d'accroche centrale ── */
+    .accroche {
+      max-width: 860px; margin: 0 auto;
+      padding: 5rem 2.5rem;
+      text-align: center;
+    }
+    .accroche-quote {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.4;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .accroche-quote span { color: var(--blue); }
+    .accroche p {
+      font-size: 1rem; color: var(--ink-mid);
+      font-weight: 300; line-height: 1.85;
+      max-width: 640px; margin: 0 auto 2rem;
+    }
+
+    /* ── Ce que je crée ── */
+    .what-section {
+      background: var(--bg-alt);
+      padding: 5rem 2.5rem;
+    }
+    .what-inner { max-width: 1160px; margin: 0 auto; }
+    .what-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .what-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: var(--sh-sm);
+      transition: box-shadow 0.22s, transform 0.22s;
+      position: relative;
+      overflow: hidden;
+    }
+    .what-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--blue));
+    }
+    .what-card:hover { box-shadow: var(--sh-md); transform: translateY(-4px); }
+    .what-icon {
+      font-size: 2rem; margin-bottom: 1rem; display: block;
+    }
+    .what-card h3 {
+      font-size: 1.05rem; font-weight: 700;
+      margin-bottom: 0.5rem; color: var(--ink);
+    }
+    .what-card p {
+      font-size: 0.875rem; color: var(--ink-mid);
+      line-height: 1.75; font-weight: 300;
+    }
+    .what-card ul {
+      list-style: none; margin-top: 0.75rem;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .what-card ul li {
+      font-size: 0.82rem; color: var(--ink-light);
+      padding-left: 1rem; position: relative;
+    }
+    .what-card ul li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--card-accent, var(--blue));
+      font-size: 0.75rem;
+    }
+
+    /* ── Avantages ── */
+    .avantages {
+      padding: 5rem 2.5rem;
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+    .avantages-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    .avantage-card {
+      display: flex; gap: 1.25rem;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem;
+      box-shadow: var(--sh-sm);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .avantage-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+    .avantage-num {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: var(--blue-dim);
+      color: var(--blue);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .avantage-card h4 {
+      font-size: 0.95rem; font-weight: 700;
+      margin-bottom: 0.4rem; color: var(--ink);
+    }
+    .avantage-card p {
+      font-size: 0.875rem; color: var(--ink-mid);
+      line-height: 1.75; font-weight: 300;
+    }
+
+    /* ── Processus ── */
+    .process {
+      background: var(--blue);
+      padding: 5rem 2.5rem;
+    }
+    .process-inner { max-width: 1160px; margin: 0 auto; }
+    .process h2 {
+      color: #fff; text-align: center;
+      font-size: 1.75rem; font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .process .process-sub {
+      text-align: center;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.95rem; font-weight: 300;
+      margin-bottom: 3rem;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: 15%; right: 15%;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.3);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      position: relative; z-index: 1;
+    }
+    .step h4 {
+      color: #fff; font-size: 0.9rem; font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .step p {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem; line-height: 1.6; font-weight: 300;
+    }
+
+    /* ── Techno ── */
+    .techno {
+      padding: 5rem 2.5rem;
+      background: var(--bg-alt);
+    }
+    .techno-inner { max-width: 1160px; margin: 0 auto; }
+    .techno-grid {
+      display: flex; flex-wrap: wrap;
+      gap: 0.75rem; margin-top: 2rem;
+      justify-content: center;
+    }
+    .techno-badge {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem; font-weight: 500;
+      color: var(--ink-mid);
+      box-shadow: var(--sh-sm);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .techno-badge:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── CTA final ── */
+    .cta-final {
+      padding: 6rem 2.5rem;
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .cta-final h2 {
+      font-size: clamp(1.75rem, 3vw, 2.4rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: var(--ink); margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .cta-final h2 span { color: var(--blue); }
+    .cta-final p {
+      font-size: 1rem; color: var(--ink-mid);
+      font-weight: 300; line-height: 1.85;
+      margin-bottom: 2.5rem;
+    }
+    .cta-btns {
+      display: flex; gap: 1rem;
+      justify-content: center; flex-wrap: wrap;
+    }
+
+    @media (max-width: 860px) {
+      .what-grid { grid-template-columns: 1fr 1fr; }
+      .avantages-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-steps::before { display: none; }
+      .hero-creation { padding: 7rem 1.25rem 4rem; }
+      .accroche, .what-section, .avantages, .techno { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .process { padding-left: 1.25rem; padding-right: 1.25rem; }
+    }
+    @media (max-width: 540px) {
+      .what-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- ── HERO ── -->
+<section class="hero-creation">
+  <span class="page-tag reveal">Développement web & applications</span>
+  <h1 class="reveal d1">Des outils <span style="color:#1a9cdb">qui vous ressemblent</span></h1>
+  <p class="lead reveal d2">
+    Un site vitrine, une application métier, un outil interne sur mesure —
+    conçu avec vous, pour vos besoins réels, sans superflu.
+  </p>
+  <a href="contact.html" class="btn btn-primary reveal d3"
+     style="background:#fff;color:#2251cc;font-weight:700;">
+    Parlez-moi de votre projet →
+  </a>
+</section>
+
+<!-- ── ACCROCHE ── -->
+<section class="accroche">
+  <p class="accroche-quote reveal">
+    Vous avez une idée, un besoin, un problème à résoudre —
+    <span>transformons-le en outil concret.</span>
+  </p>
+  <p class="reveal d1">
+    Les logiciels génériques ne s'adaptent pas toujours à votre réalité.
+    Parfois, la solution idéale n'existe pas encore — il faut la créer.
+    Qu'il s'agisse d'automatiser une tâche répétitive, de centraliser des données
+    éparpillées ou de proposer une expérience en ligne à vos clients,
+    je conçois des solutions sur mesure, légères et maintenables.
+  </p>
+  <a href="contact.html" class="btn btn-outline reveal d2">Discutons de votre projet</a>
+</section>
+
+<!-- ── CE QUE JE CRÉE ── -->
+<section class="what-section">
+  <div class="what-inner">
+    <span class="section-tag reveal">Mes réalisations</span>
+    <h2 class="section-title reveal d1">Ce que je peux créer pour vous</h2>
+
+    <div class="what-grid">
+
+      <div class="what-card reveal" style="--card-accent:#2251cc">
+        <span class="what-icon">🌐</span>
+        <h3>Site vitrine professionnel</h3>
+        <p>Un site rapide, élégant et optimisé qui reflète votre image et convertit vos visiteurs en clients.</p>
+        <ul>
+          <li>Design personnalisé selon votre charte</li>
+          <li>Responsive mobile & tablette</li>
+          <li>Formulaire de contact & prise de RDV</li>
+          <li>Référencement SEO de base inclus</li>
+          <li>Hébergement simple & économique</li>
+        </ul>
+      </div>
+
+      <div class="what-card reveal d1" style="--card-accent:#1a9cdb">
+        <span class="what-icon">⚙️</span>
+        <h3>Application Google Workspace</h3>
+        <p>Des outils sur mesure directement intégrés dans votre environnement Google — sans abonnement supplémentaire.</p>
+        <ul>
+          <li>Système de publipostage automatisé</li>
+          <li>Gestion de dossiers et documents</li>
+          <li>Formulaires intelligents avec workflow</li>
+          <li>Tableaux de bord de suivi dynamiques</li>
+          <li>Notifications et alertes automatiques</li>
+        </ul>
+      </div>
+
+      <div class="what-card reveal d2" style="--card-accent:#3d8c6e">
+        <span class="what-icon">🛠️</span>
+        <h3>Outil interne sur mesure</h3>
+        <p>Une application web dédiée à un besoin précis de votre établissement ou de votre entreprise.</p>
+        <ul>
+          <li>Gestion des inscriptions ou adhérents</li>
+          <li>Suivi de projet ou de planning</li>
+          <li>Portail de ressources partagées</li>
+          <li>Interface de saisie simplifiée</li>
+          <li>Export automatique PDF ou Sheets</li>
+        </ul>
+      </div>
+
+      <div class="what-card reveal d1" style="--card-accent:#bf5a2b">
+        <span class="what-icon">🤖</span>
+        <h3>Application augmentée par l'IA</h3>
+        <p>Intégrez l'intelligence artificielle dans vos processus pour automatiser les tâches à faible valeur ajoutée.</p>
+        <ul>
+          <li>Génération automatique d'appréciations</li>
+          <li>Rédaction assistée de documents</li>
+          <li>Analyse et résumé de données textuelles</li>
+          <li>Chatbot métier sur vos propres données</li>
+          <li>Connexion à l'API OpenAI / Gemini</li>
+        </ul>
+      </div>
+
+      <div class="what-card reveal d2" style="--card-accent:#7c3aed">
+        <span class="what-icon">📊</span>
+        <h3>Tableau de bord & reporting</h3>
+        <p>Visualisez vos données en temps réel pour piloter votre activité ou votre établissement plus efficacement.</p>
+        <ul>
+          <li>Dashboard connecté à vos données Google</li>
+          <li>Indicateurs clés mis à jour automatiquement</li>
+          <li>Graphiques interactifs et filtrables</li>
+          <li>Accès sécurisé par profil utilisateur</li>
+          <li>Export PDF ou impression intégrée</li>
+        </ul>
+      </div>
+
+      <div class="what-card reveal d3" style="--card-accent:#0f766e">
+        <span class="what-icon">📱</span>
+        <h3>Extension Chrome / Module Sheets</h3>
+        <p>Un outil qui s'intègre directement dans les logiciels que vous utilisez déjà au quotidien.</p>
+        <ul>
+          <li>Extension Chrome pour automatiser des tâches web</li>
+          <li>Module Apps Script dans votre classeur Sheets</li>
+          <li>Sidebar personnalisée dans Docs ou Gmail</li>
+          <li>Intégration avec des services tiers (APIs)</li>
+          <li>Code source livré, vous êtes propriétaire</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── AVANTAGES ── -->
+<section style="padding:5rem 2.5rem; background: var(--bg);">
+  <div class="avantages" style="padding:0; max-width:1160px; margin:0 auto;">
+    <span class="section-tag reveal">Pourquoi travailler avec moi ?</span>
+    <h2 class="section-title reveal d1">Les avantages d'une solution sur mesure</h2>
+
+    <div class="avantages-grid">
+
+      <div class="avantage-card reveal">
+        <div class="avantage-num">01</div>
+        <div>
+          <h4>Vous parlez à la personne qui code</h4>
+          <p>Pas d'intermédiaire, pas de chef de projet entre deux. Vous me décrivez votre besoin directement — je le comprends, je le questionne, je le construis. La communication est claire et rapide.</p>
+        </div>
+      </div>
+
+      <div class="avantage-card reveal d1">
+        <div class="avantage-num">02</div>
+        <div>
+          <h4>Construit sur vos vrais besoins</h4>
+          <p>Je ne vends pas un template préfabriqué. Chaque projet démarre par un entretien pour comprendre votre contexte, vos contraintes et vos utilisateurs. Le résultat colle à votre réalité.</p>
+        </div>
+      </div>
+
+      <div class="avantage-card reveal">
+        <div class="avantage-num">03</div>
+        <div>
+          <h4>Vous êtes propriétaire à 100%</h4>
+          <p>Le code source vous est livré intégralement. Pas d'abonnement caché, pas de dépendance envers moi. Vous pouvez faire évoluer votre outil par la suite avec n'importe quel développeur.</p>
+        </div>
+      </div>
+
+      <div class="avantage-card reveal d1">
+        <div class="avantage-num">04</div>
+        <div>
+          <h4>Double expertise pédagogique & technique</h4>
+          <p>18 ans en milieu scolaire et une maîtrise technique réelle : je comprends les contraintes des établissements, des équipes administratives et des entreprises. Les outils que je crée sont adoptés facilement.</p>
+        </div>
+      </div>
+
+      <div class="avantage-card reveal">
+        <div class="avantage-num">05</div>
+        <div>
+          <h4>Solutions légères et économiques</h4>
+          <p>Je privilégie les technologies simples et gratuites — Google Workspace, GitHub Pages, APIs ouvertes. Pas de serveur coûteux, pas d'hébergement complexe. Des outils qui durent et qui ne coûtent rien à maintenir.</p>
+        </div>
+      </div>
+
+      <div class="avantage-card reveal d1">
+        <div class="avantage-num">06</div>
+        <div>
+          <h4>Accompagnement & formation inclus</h4>
+          <p>La livraison ne s'arrête pas au code. Je vous forme à l'utilisation de votre outil, je documente les fonctionnalités et reste disponible pour les ajustements après livraison.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PROCESSUS ── -->
+<section class="process">
+  <div class="process-inner">
+    <h2 class="reveal">Comment ça se passe ?</h2>
+    <p class="process-sub reveal d1">Un processus simple, transparent et sans surprise.</p>
+
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <h4>Entretien de découverte</h4>
+        <p>On discute de votre projet, vos besoins, vos contraintes et vos utilisateurs. Gratuit et sans engagement.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="step-num">2</div>
+        <h4>Proposition & devis</h4>
+        <p>Je vous soumets une proposition détaillée : périmètre, fonctionnalités, délais et budget. Tout est clair avant de commencer.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-num">3</div>
+        <h4>Conception & itérations</h4>
+        <p>Je construis votre outil par étapes, avec des points réguliers pour valider ensemble la direction prise.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="step-num">4</div>
+        <h4>Livraison & formation</h4>
+        <p>Mise en ligne, remise du code source, formation à l'utilisation et documentation. Votre outil est entre vos mains.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TECHNOLOGIES ── -->
+<section class="techno">
+  <div class="techno-inner">
+    <span class="section-tag reveal" style="display:block;text-align:center">Stack technique</span>
+    <h2 class="section-title reveal d1" style="text-align:center;margin-bottom:0.5rem">Technologies utilisées</h2>
+    <p style="text-align:center;color:var(--ink-mid);font-size:0.9rem;font-weight:300;margin-bottom:2rem;" class="reveal d2">
+      Des choix techniques raisonnés — simples à maintenir, économiques à héberger.
+    </p>
+    <div class="techno-grid reveal d2">
+      <span class="techno-badge">HTML / CSS / JavaScript</span>
+      <span class="techno-badge">Google Apps Script</span>
+      <span class="techno-badge">Google Workspace APIs</span>
+      <span class="techno-badge">GitHub Pages</span>
+      <span class="techno-badge">OpenAI API</span>
+      <span class="techno-badge">Gemini API</span>
+      <span class="techno-badge">Google Forms & Sheets</span>
+      <span class="techno-badge">Extensions Chrome</span>
+      <span class="techno-badge">REST APIs</span>
+      <span class="techno-badge">EmailJS</span>
+      <span class="techno-badge">Stripe</span>
+      <span class="techno-badge">Python</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA FINAL ── -->
+<section style="background:var(--bg);">
+  <div class="cta-final">
+    <h2 class="reveal">Vous avez un projet en tête ?<br><span>Parlons-en.</span></h2>
+    <p class="reveal d1">
+      Pas besoin d'un cahier des charges complet pour démarrer.
+      Une idée, un problème à résoudre, une tâche répétitive qui vous pèse —
+      c'est suffisant pour un premier échange. L'entretien de découverte est offert,
+      sans engagement de votre part.
+    </p>
+    <div class="cta-btns reveal d2">
+      <a href="contact.html" class="btn btn-primary">Décrire mon projet →</a>
+      <a href="contact.html" class="btn btn-outline">Prendre rendez-vous 📆</a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="shared.js"></script>
+</body>
+</html>
