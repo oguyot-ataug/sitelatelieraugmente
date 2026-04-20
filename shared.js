@@ -13,7 +13,7 @@ function loadPartial(selector, file, callback) {
     .catch(() => console.warn('Partial non trouvé :', file));
 }
 
-// Lien actif dans la nav
+// ── Lien actif ──
 function setActiveNav() {
   const page = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(a => {
@@ -21,69 +21,61 @@ function setActiveNav() {
   });
 }
 
-// Burger menu
+// ── Menu burger slide-in ──
 function initBurger() {
-  const burger = document.querySelector('.nav-burger');
-  const navLinks = document.querySelector('.nav-links');
-  if (!burger || !navLinks) return;
-
-  // Supprimer anciens listeners en clonant
-  const newBurger = burger.cloneNode(true);
-  burger.parentNode.replaceChild(newBurger, burger);
+  const burger  = document.getElementById('nav-burger');
+  const links   = document.getElementById('nav-links');
+  const overlay = document.getElementById('nav-overlay');
+  if (!burger || !links) return;
 
   function openMenu() {
-    navLinks.classList.add('open');
-    document.body.style.overflow = 'hidden'; // bloquer scroll fond
-    const [s1, s2, s3] = newBurger.querySelectorAll('span');
+    links.classList.add('open');
+    if (overlay) overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    const [s1, s2, s3] = burger.querySelectorAll('span');
     s1.style.transform = 'translateY(6.5px) rotate(45deg)';
-    s2.style.opacity = '0';
+    s2.style.opacity   = '0';
     s3.style.transform = 'translateY(-6.5px) rotate(-45deg)';
   }
 
   function closeMenu() {
-    navLinks.classList.remove('open');
+    links.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
     document.body.style.overflow = '';
-    newBurger.querySelectorAll('span').forEach(s => {
+    burger.querySelectorAll('span').forEach(s => {
       s.style.transform = '';
-      s.style.opacity = '';
+      s.style.opacity   = '';
     });
   }
 
-  newBurger.addEventListener('click', () => {
-    navLinks.classList.contains('open') ? closeMenu() : openMenu();
+  burger.addEventListener('click', () => {
+    links.classList.contains('open') ? closeMenu() : openMenu();
   });
 
-  // Fermer au clic sur un lien
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', closeMenu);
-  });
+  // Clic sur l'overlay → ferme
+  if (overlay) overlay.addEventListener('click', closeMenu);
 
-  // Fermer en cliquant en dehors
-  document.addEventListener('click', (e) => {
-    if (navLinks.classList.contains('open')
-        && !navLinks.contains(e.target)
-        && !newBurger.contains(e.target)) {
-      closeMenu();
-    }
-  });
+  // Clic sur un lien → ferme
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
-  // Fermer avec la touche Echap
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMenu();
-  });
+  // Touche Échap → ferme
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+}
+
+// ── Nav scroll shadow ──
+function initNavScroll() {
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
 }
 
 // ── Chargement des partials ──
 loadPartial('#site-header', 'header.html', () => {
   setActiveNav();
   initBurger();
-  // Nav scroll shadow (après injection header)
-  const nav = document.querySelector('nav');
-  if (nav) {
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 50);
-    }, { passive: true });
-  }
+  initNavScroll();
 });
 loadPartial('#site-footer', 'footer.html');
 
