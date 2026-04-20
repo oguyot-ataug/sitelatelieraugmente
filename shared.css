@@ -105,31 +105,47 @@ nav.scrolled {
 @media (max-width: 860px) {
   nav { padding: 0.85rem 1.25rem; }
 
-  /* Menu mobile — overlay plein écran SOLIDE sous la nav */
+  /* Panneau slide-in depuis la droite */
   .nav-links {
-    display: none;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: #ffffff;   /* fond blanc 100% opaque */
+    top: 0; right: 0; bottom: 0;
+    width: 75vw; max-width: 300px;
+    background: #ffffff;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.15);
     flex-direction: column;
     align-items: stretch;
-    justify-content: flex-start;
-    padding-top: 80px;     /* espace pour la nav */
+    justify-content: center;
     gap: 0;
     z-index: 998;
-    overflow: hidden;      /* pas d'ascenseur */
+    overflow: hidden;
+    padding: 2rem 0;
+    /* État fermé : hors écran à droite */
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex; /* toujours flex, on anime avec transform */
   }
-  .nav-links.open { display: flex; }
+  .nav-links.open {
+    transform: translateX(0);
+  }
+
+  /* Overlay sombre derrière le panneau */
+  .nav-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 997;
+  }
+  .nav-overlay.open { display: block; }
 
   .nav-links li {
     width: 100%;
     border-bottom: 1px solid var(--border);
   }
-  .nav-links li:last-child { border-bottom: none; }
+  .nav-links li:first-child { border-top: 1px solid var(--border); }
 
   .nav-links a {
     font-size: 1rem; font-weight: 500;
-    padding: 1rem 1.5rem; display: block;
+    padding: 1rem 1.75rem; display: block;
     color: var(--ink); text-align: left;
     background: #ffffff;
     transition: background 0.15s, color 0.15s;
@@ -139,11 +155,8 @@ nav.scrolled {
     background: var(--blue-dim); color: var(--blue);
   }
 
-  /* Bouton Rendez-vous dans le menu */
-  .nav-links li:last-child {
-    padding: 1rem 1.5rem;
-    border-bottom: none;
-  }
+  /* Bouton RDV */
+  .nav-links li:last-child { border-bottom: none; padding: 1.25rem 1.75rem; }
   .nav-cta {
     display: block !important;
     text-align: center !important;
@@ -154,7 +167,6 @@ nav.scrolled {
     color: #fff !important;
   }
 
-  /* Burger toujours au-dessus */
   .nav-burger { display: flex; z-index: 1000; position: relative; }
 }
 
