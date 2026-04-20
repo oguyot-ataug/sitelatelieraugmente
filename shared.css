@@ -103,44 +103,59 @@ nav.scrolled {
 .nav-burger span { display: block; width: 22px; height: 1.5px; background: var(--ink); transition: all 0.3s; }
 
 @media (max-width: 860px) {
-  nav { padding: 0.9rem 1.5rem; }
+  nav { padding: 0.85rem 1.25rem; }
 
-  /* Menu overlay plein écran */
+  /* Menu mobile — overlay plein écran SOLIDE sous la nav */
   .nav-links {
     display: none;
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(250,247,242,0.98);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    flex-direction: column; align-items: center; justify-content: center;
-    gap: 0.25rem; z-index: 999;
-    overflow-y: auto;
-    padding: 5rem 2rem 3rem;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #ffffff;   /* fond blanc 100% opaque */
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding-top: 80px;     /* espace pour la nav */
+    gap: 0;
+    z-index: 998;
+    overflow: hidden;      /* pas d'ascenseur */
   }
   .nav-links.open { display: flex; }
-  .nav-links li { width: 100%; text-align: center; }
+
+  .nav-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-links li:last-child { border-bottom: none; }
+
   .nav-links a {
-    font-size: 1.3rem; font-weight: 600;
-    padding: 0.9rem 1rem; display: block;
-    color: var(--ink); border-bottom: 1px solid var(--border);
+    font-size: 1rem; font-weight: 500;
+    padding: 1rem 1.5rem; display: block;
+    color: var(--ink); text-align: left;
+    background: #ffffff;
+    transition: background 0.15s, color 0.15s;
   }
-  .nav-links a:hover { color: var(--blue); }
-  .nav-links li:last-child a { border-bottom: none; }
+  .nav-links a::after { display: none; }
+  .nav-links a:hover, .nav-links a.active {
+    background: var(--blue-dim); color: var(--blue);
+  }
 
-  /* Bouton CTA dans le menu mobile */
+  /* Bouton Rendez-vous dans le menu */
+  .nav-links li:last-child {
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+  }
   .nav-cta {
-    display: inline-block !important;
-    margin-top: 1.5rem !important;
-    border-bottom: none !important;
-    font-size: 1rem !important;
+    display: block !important;
+    text-align: center !important;
+    border-radius: 6px !important;
+    font-size: 0.9rem !important;
+    padding: 0.75rem 1rem !important;
+    background: var(--blue) !important;
+    color: #fff !important;
   }
 
-  /* Burger au-dessus du menu */
-  .nav-burger {
-    display: flex;
-    z-index: 1001; /* toujours au-dessus du menu overlay */
-    position: relative;
-  }
+  /* Burger toujours au-dessus */
+  .nav-burger { display: flex; z-index: 1000; position: relative; }
 }
 
 /* ===== BOUTONS ===== */
