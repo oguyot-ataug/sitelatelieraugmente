@@ -74,6 +74,33 @@
       /* Pas de filtre, pas de resize — laisser le navigateur afficher en net */
     }
     .certs-note { font-size: 0.78rem; color: var(--ink-light); font-weight: 300; }
+    .certs-sub-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--ink-light);
+      text-align: center; display: block; margin-bottom: 1.25rem;
+      font-family: 'Geist', system-ui, sans-serif;
+    }
+    .cert-diploma { text-decoration: none; }
+    .diploma-card {
+      display: flex; align-items: center; gap: 1.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.75rem 2rem;
+      box-shadow: var(--sh-sm);
+      transition: box-shadow 0.22s, transform 0.22s, border-color 0.22s;
+      max-width: 520px; margin: 0 auto;
+    }
+    .cert-diploma:hover .diploma-card {
+      box-shadow: var(--sh-md); transform: translateY(-3px);
+      border-color: rgba(34,81,204,0.2);
+    }
+    .diploma-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .diploma-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--ink); margin-bottom: 0.3rem; line-height: 1.4;
+    }
+    .diploma-issuer { font-size: 0.8rem; color: var(--ink-mid); margin-bottom: 0.5rem; }
+    .diploma-link { font-size: 0.78rem; color: var(--blue); font-weight: 500; }
 
     @media (max-width: 900px) { .bio { grid-template-columns: 1fr; padding: 3rem 1.25rem; } .bio-card { position: static; } .pgrid { grid-template-columns: 1fr; } .vgrid { grid-template-columns: 1fr; } .pillars, .values { padding: 4.5rem 1.25rem; } }
   </style>
@@ -112,8 +139,12 @@
 <!-- ══ CERTIFICATIONS ══ -->
 <section class="certs">
   <div class="certs-inner">
-    <span class="section-tag reveal" style="display:block;text-align:center">Certifications officielles</span>
-    <h2 class="section-title reveal d1" style="text-align:center;margin-bottom:2.5rem">Certifié par Google</h2>
+    <span class="section-tag reveal" style="display:block;text-align:center">Certifications &amp; Diplômes</span>
+    <h2 class="section-title reveal d1" style="text-align:center;margin-bottom:0.75rem">Reconnu &amp; certifié</h2>
+    <p style="text-align:center;color:var(--ink-mid);font-size:0.9rem;font-weight:300;margin-bottom:2.5rem;" class="reveal d2">Cliquez sur un badge pour vérifier la certification</p>
+
+    <!-- Badges Google -->
+    <p class="certs-sub-label reveal">Certifications Google</p>
     <div class="certs-grid reveal d2">
       <a href="https://credential.net/172645205" target="_blank" rel="noopener" class="cert-item">
         <img src="https://api.accredible.com/v1/frontend/credential_website_embed_image/badge/172645205"
@@ -128,7 +159,21 @@
              alt="Google Certified Educator" width="200" height="200" loading="lazy">
       </a>
     </div>
-    <p class="certs-note reveal d3">Cliquez sur un badge pour vérifier la certification</p>
+
+    <!-- Diplôme Certiplace -->
+    <p class="certs-sub-label reveal" style="margin-top:2.5rem;">Diplôme professionnel</p>
+    <div class="certs-grid reveal d2">
+      <a href="https://www.certiplace.fr/credentials/fbbfd4b1f8efc5e52ee83f89" target="_blank" rel="noopener" class="cert-item cert-diploma">
+        <div class="diploma-card">
+          <div class="diploma-icon">🎓</div>
+          <div class="diploma-body">
+            <div class="diploma-title">Créer et développer une activité de formation professionnelle</div>
+            <div class="diploma-issuer">Certiplace · Formation certifiante</div>
+            <div class="diploma-link">Vérifier le diplôme →</div>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
 </section>
 
