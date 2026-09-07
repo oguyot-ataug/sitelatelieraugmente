@@ -109,3 +109,40 @@ document.addEventListener('DOMContentLoaded', function() {
     revealObserver.observe(reveals[i]);
   }
 });
+
+// ===== CARROUSEL "PROJET PHARE" =====
+// Fait défiler automatiquement plusieurs captures d'écran de L'Atelier des Maths dans le
+// cadre façon navigateur (accueil + Créations). Demandé : "il serait bien d'avoir plusieurs
+// copies d'écran qui défilent, montrant aussi les outils profs, le tableau interactif, le
+// cahier, et le compte est bon et les automatismes".
+function initFeaturedCarousel() {
+  var carousels = document.querySelectorAll('.browser-mockup-carousel');
+  for (var c = 0; c < carousels.length; c++) {
+    (function(root) {
+      var slides = root.querySelectorAll('.carousel-slide');
+      var dots = root.querySelectorAll('.carousel-dot');
+      var idx = 0;
+      var timer = null;
+      function show(n) {
+        idx = (n + slides.length) % slides.length;
+        for (var i = 0; i < slides.length; i++) slides[i].classList.toggle('active', i === idx);
+        for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === idx);
+        var urlEl = root.querySelector('.browser-mockup-url');
+        if (urlEl && slides[idx].dataset.url) urlEl.textContent = slides[idx].dataset.url;
+      }
+      function next() { show(idx + 1); }
+      function restart() {
+        if (timer) clearInterval(timer);
+        timer = setInterval(next, 3200);
+      }
+      for (var i = 0; i < dots.length; i++) {
+        (function(i) {
+          dots[i].addEventListener('click', function() { show(i); restart(); });
+        })(i);
+      }
+      show(0);
+      restart();
+    })(carousels[c]);
+  }
+}
+document.addEventListener('DOMContentLoaded', initFeaturedCarousel);
