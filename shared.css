@@ -323,3 +323,55 @@ footer {
 .mentions-section p, .mentions-section address { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.8; font-style: normal; }
 .mentions-section a { color: var(--blue); }
 @media (max-width: 600px) { .mentions-section { padding: 140px 1.25rem 4rem; } }
+
+/* ===== PROJET PHARE (L'Atelier des Maths) ===== */
+.featured {
+  padding: 6rem 2.5rem; background: var(--bg-alt);
+}
+.featured-inner {
+  max-width: 1160px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; align-items: center;
+}
+.featured-copy .section-sub { max-width: none; margin-bottom: 1.75rem; }
+.featured-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--sage-dim); color: var(--sage);
+  border-radius: 20px; padding: 0.35rem 0.9rem;
+  font-size: 0.78rem; font-weight: 600; margin-bottom: 1.1rem;
+}
+.featured-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+.featured-list { list-style: none; margin: 0 0 2rem; padding: 0; }
+.featured-list li {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  font-size: 0.9rem; color: var(--ink-mid); margin-bottom: 0.7rem; line-height: 1.6;
+}
+.featured-list li::before {
+  content: '✓'; color: var(--blue); font-weight: 700; flex: none;
+  width: 20px; height: 20px; border-radius: 50%; background: var(--blue-dim);
+  display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
+}
+/* Cadre façon fenêtre de navigateur, autour d'une vraie capture d'écran de la plateforme */
+.browser-mockup {
+  border-radius: 12px; overflow: hidden;
+  box-shadow: var(--sh-lg); border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.browser-mockup:hover { transform: translateY(-4px); }
+.browser-mockup-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0.7rem 1rem; background: #ece5d8; border-bottom: 1px solid var(--border);
+}
+.browser-mockup-dots { display: flex; gap: 6px; flex: none; }
+.browser-mockup-dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.browser-mockup-dots span:nth-child(1) { background: #e6564c; }
+.browser-mockup-dots span:nth-child(2) { background: #e6b422; }
+.browser-mockup-dots span:nth-child(3) { background: #3d8c6e; }
+.browser-mockup-url {
+  flex: 1; text-align: center; font-size: 0.75rem; color: var(--ink-light);
+  font-family: 'Geist', monospace; letter-spacing: 0;
+}
+.browser-mockup img { display: block; width: 100%; height: auto; }
+@media (max-width: 860px) {
+  .featured-inner { grid-template-columns: 1fr; }
+}
