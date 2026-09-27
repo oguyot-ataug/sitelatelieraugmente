@@ -146,3 +146,39 @@ function initFeaturedCarousel() {
   }
 }
 document.addEventListener('DOMContentLoaded', initFeaturedCarousel);
+
+/* Vidéos de L'Atelier des Maths en accordéon : un clic sur une vignette ouvre sa vidéo sur toute la
+   largeur (une seule ouverte à la fois) ; nouveau clic sur la vignette ou sur « Voir la vidéo » : fermeture. */
+function initAtelierVideos() {
+  var BASE = 'https://maths.latelieraugmente.fr/assets/videos/';
+  function fermer(t) {
+    if (!t) return;
+    var v = t.querySelector('video'); if (v) v.pause();
+    var p = t.querySelector('.av-panel'); if (p) p.parentNode.removeChild(p);
+    var g = t.querySelector('.av-go'); if (g) g.parentNode.removeChild(g);
+    t.classList.remove('open'); t.setAttribute('aria-expanded', 'false');
+  }
+  function ouvrir(t) {
+    var ouvertes = document.querySelectorAll('.av-tile.open');
+    for (var i = 0; i < ouvertes.length; i++) fermer(ouvertes[i]);
+    var nom = t.getAttribute('data-video'), q = t.getAttribute('data-v') ? '?v=' + t.getAttribute('data-v') : '';
+    var titre = (t.querySelector('h3') || {}).textContent || '';
+    var p = document.createElement('div'); p.className = 'av-panel';
+    p.innerHTML = '<video controls playsinline preload="metadata" poster="' + BASE + nom + '.jpg' + q + '" aria-label="Vidéo : ' + titre.replace('Nouveau', '').replace(/"/g, '').trim() + '"><source src="' + BASE + nom + '.mp4' + q + '" type="video/mp4"></video>';
+    p.addEventListener('click', function (e) { e.stopPropagation(); });
+    t.appendChild(p); t.classList.add('open'); t.setAttribute('aria-expanded', 'true');
+    var g = document.createElement('a'); g.className = 'av-go'; g.href = 'https://maths.latelieraugmente.fr'; g.target = '_blank'; g.rel = 'noopener'; g.textContent = 'Essayer sur la plateforme →';
+    g.addEventListener('click', function (e) { e.stopPropagation(); });
+    t.querySelector('.av-txt').appendChild(g);
+    var v = p.querySelector('video'); var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+    setTimeout(function () { t.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 60);
+  }
+  var tuiles = document.querySelectorAll('.av-tile');
+  for (var i = 0; i < tuiles.length; i++) {
+    (function (t) {
+      t.addEventListener('click', function () { if (t.classList.contains('open')) fermer(t); else ouvrir(t); });
+      t.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t.click(); } });
+    })(tuiles[i]);
+  }
+}
+document.addEventListener('DOMContentLoaded', initAtelierVideos);

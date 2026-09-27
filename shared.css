@@ -416,3 +416,25 @@ footer {
 .video-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--ink); margin: 0 1.25rem 0.4rem; }
 .video-card p { font-size: 0.88rem; color: var(--ink-mid); line-height: 1.65; margin: 0 1.25rem; }
 @media (max-width: 760px) { .video-grid { grid-template-columns: 1fr; } .videos { padding: 3.5rem 0 4rem; } }
+
+/* Vidéos de L'Atelier des Maths en accordéon dans les vignettes (index, créations) */
+.av-group { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--ink); margin: 1.75rem 0 .8rem; }
+.av-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.av-tile { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--sh-sm); padding: 1.1rem 1.2rem; cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s; outline: none; }
+.av-tile:hover, .av-tile:focus-visible { transform: translateY(-2px); box-shadow: var(--sh-md); border-color: rgba(34,81,204,.3); }
+.av-tile h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 700; color: var(--ink); margin: 0 0 .35rem; display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; line-height: 1.35; }
+.av-ico { font-size: 1.15rem; }
+.av-new { background: var(--terra); color: #fff; border-radius: 999px; padding: .05rem .55rem; font-size: .66rem; font-weight: 700; letter-spacing: .03em; }
+.av-tile p { font-size: .86rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+.av-btn { display: inline-flex; align-items: center; gap: .4rem; margin-top: .8rem; border: 1.5px solid rgba(34,81,204,.28); background: var(--blue-dim); color: var(--blue); border-radius: 999px; padding: .22rem .8rem .22rem .6rem; font-size: .8rem; font-weight: 600; }
+.av-btn small { color: var(--ink-light); font-weight: 500; }
+.av-play { font-size: .7rem; }
+.av-tile.open { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 1.5rem; align-items: start; cursor: default; transform: none; border-color: rgba(34,81,204,.4); box-shadow: var(--sh-md); }
+.av-tile.open h3 { font-size: 1.15rem; }
+.av-tile.open .av-btn { background: var(--blue); color: #fff; border-color: var(--blue); cursor: pointer; }
+.av-tile.open .av-btn small { color: rgba(255,255,255,.8); }
+.av-panel video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #1C2B39; border-radius: 10px; }
+.av-go { display: inline-block; margin: .8rem 0 0 .4rem; font-size: .8rem; font-weight: 600; color: var(--blue); text-decoration: none; }
+.av-go:hover { text-decoration: underline; }
+@media (max-width: 900px) { .av-grid { grid-template-columns: repeat(2, 1fr); } .av-tile.open { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .av-grid { grid-template-columns: 1fr; } }
